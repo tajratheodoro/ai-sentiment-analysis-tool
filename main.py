@@ -1,15 +1,17 @@
 from analyzer import SentimentAnalyzer
 from models import Feedback
+from time import sleep
 
 ia = SentimentAnalyzer()
 
 print("Bem-vindo ao sistema de análise de feedbacks dos clientes!\n")
-cliente1 = Feedback("O bot do whatsapp é excelente e muito rápido!", 101)
-cliente2 = Feedback("Achei o sistema péssimo, travou tudo.", 102)
-cliente3 = Feedback("Funciona de forma ok, nada demais.", 103)
-cliente4 = Feedback("O atendimento é bom, mas poderia ser melhor.", 104)
+cliente1 = Feedback("The whatsapp bot is amazing and very fast!", 101)
+cliente2 = Feedback("I had a terrible experience, it keeps crashing.", 102)
+cliente3 = Feedback("It is a decent tool, but could be better.", 103)
+cliente4 = Feedback("The customer service is good, but it could be better.", 104)
 
 print("Começando a análise de feedbacks dos clientes...\n")
+sleep(2)
 
 ia.analisar(cliente1)
 ia.analisar(cliente2)
@@ -19,4 +21,5 @@ ia.analisar(cliente4)
 print(f"Resultado da análise do cliente 1: {cliente1.nota}  ")
 print(f"Resultado da análise do cliente 2: {cliente2.nota}  ")
 print(f"Resultado da análise do cliente 3: {cliente3.nota}  ")
+print(f"Resultado da análise do cliente 4: {cliente4.nota}  ")
 print(ia.gerar_relatorio())
