@@ -4,13 +4,13 @@ from time import sleep
 
 ia = SentimentAnalyzer()
 
-print("Bem-vindo ao sistema de análise de feedbacks dos clientes!\n")
+print("Welcome to the customer feedback analysis system!\n")
 cliente1 = Feedback("The whatsapp bot is amazing and very fast!", 101)
 cliente2 = Feedback("I had a terrible experience, it keeps crashing.", 102)
 cliente3 = Feedback("It is a decent tool, but could be better.", 103)
 cliente4 = Feedback("The customer service is good, but it could be better.", 104)
 
-print("Começando a análise de feedbacks dos clientes...\n")
+print("Beginning the analysis of customer feedback...\n")
 sleep(2)
 
 ia.analisar(cliente1)
