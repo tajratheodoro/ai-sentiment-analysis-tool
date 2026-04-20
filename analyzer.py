@@ -1,36 +1,36 @@
-# Aqui está toda a lógica da inteligência artificial para análise de feedbacks.
-
+from textblob import TextBlob
 class SentimentAnalyzer:
     def __init__(self):
-        self.analise_historico = []
+        self.historical_analysis = []
     
-    def analisar(self, feedback_objeto):
-        texto = feedback_objeto.text.lower()
+    def analisar(self, feedback_object):
+        blob = TextBlob(feedback_object.text)
+        score = blob.sentiment.polarity
 
-        if "bom" in texto or "excelente" in texto:
-            analise = "Feedback dos clientes foi excelente!."
-        elif "ruim" in texto or "péssimo" in texto:
-            analise = "Feedback dos clientes foi negativo..."
+        # Nova regra: Se o feedback contiver a palavra "but", reduzimos a pontuação em 0.4 para refletir a ambiguidade.
+        if "but" in feedback_object.text.lower():
+            score = score - 0.4
+        
+#        print(f"DEBUG - Text: {feedback_object.text[:3]}... | Score: {score}")
+
+        if score > 0.34:
+            analysis = "Positive"
+        elif score < -0.3:
+            analysis = "Negative"
         else:
-            analise = "Feedback dos clientes foi neutro.."   
+            analysis = "Neutral"
 
-        feedback_objeto.nota = analise
-        self.analise_historico.append(feedback_objeto)
+        feedback_object.nota = analysis
+        self.historical_analysis.append(feedback_object)
     
     def gerar_relatorio(self):
-        # Verificando se há feedbacks analisados
-        if not self.analise_historico:
-            return "Nenhum feedback analisado ainda."
+        if not self.historical_analysis:
+            return "No feedback has been analyzed yet."
 
-        # Contando o número total de feedbacks analisados
-        total = len(self.analise_historico)
+        total = len(self.historical_analysis)
+        positives = len([f for f in self.historical_analysis if f.nota.lower() == "positive"])
 
-        # Contando o número de feedbacks positivos
-        positivos = 0
-        for f in self.analise_historico:
-            if "excelente" in f.nota:
-                positivos += 1
 
-        porcentagem_positivos = (positivos / total) * 100
+        porcentagem_positivos = (positives / total) * 100
 
-        return f"RELATÓRIO FINAL DE ANÁLISE DE FEEDBACKS:\nTotal analisados: {total}\nSatisfação dos clientes: {porcentagem_positivos:.2f}% positivos."
+        return f"\nFINAL FEEDBACK ANALYSIS REPORT:\nTotal feedbacks analyzed: {total}\nCustomer Satisfaction: {porcentagem_positivos:.2f}% positive."
