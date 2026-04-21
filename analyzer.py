@@ -23,7 +23,7 @@ class SentimentAnalyzer:
         feedback_object.nota = analysis
         self.historical_analysis.append(feedback_object)
     
-    def gerar_relatorio(self):
+    def generate_report(self):
         if not self.historical_analysis:
             return "No feedback has been analyzed yet."
 
@@ -31,6 +31,6 @@ class SentimentAnalyzer:
         positives = len([f for f in self.historical_analysis if f.nota.lower() == "positive"])
 
 
-        porcentagem_positivos = (positives / total) * 100
+        percentage_positives = (positives / total) * 100
 
-        return f"\nFINAL FEEDBACK ANALYSIS REPORT:\nTotal feedbacks analyzed: {total}\nCustomer Satisfaction: {porcentagem_positivos:.2f}% positive."
+        return f"\nFINAL FEEDBACK ANALYSIS REPORT:\nTotal feedbacks analyzed: {total}\nCustomer Satisfaction: {percentage_positives:.2f}% positive."
