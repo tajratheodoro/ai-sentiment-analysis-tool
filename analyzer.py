@@ -3,7 +3,7 @@ class SentimentAnalyzer:
     def __init__(self):
         self.historical_analysis = []
     
-    def analisar(self, feedback_object):
+    def analyse(self, feedback_object):
         blob = TextBlob(feedback_object.text)
         score = blob.sentiment.polarity
 
@@ -20,7 +20,7 @@ class SentimentAnalyzer:
         else:
             analysis = "Neutral"
 
-        feedback_object.nota = analysis
+        feedback_object.score = analysis
         self.historical_analysis.append(feedback_object)
     
     def generate_report(self):
@@ -28,7 +28,7 @@ class SentimentAnalyzer:
             return "No feedback has been analyzed yet."
 
         total = len(self.historical_analysis)
-        positives = len([f for f in self.historical_analysis if f.nota.lower() == "positive"])
+        positives = len([f for f in self.historical_analysis if f.score.lower() == "positive"])
 
 
         percentage_positives = (positives / total) * 100
