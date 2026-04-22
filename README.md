@@ -1,27 +1,23 @@
-# Smart Sentiment Analyzer 🤖📊
+# 🤖 AI Customer Sentiment Analyzer
 
-Este projeto é uma ferramenta de Inteligência Artificial desenvolvida em Python que utiliza Programação Orientada a Objetos (POO) para analisar e categorizar o sentimento de feedbacks de usuários.
+Um sistema completo de análise de sentimentos impulsionado por Inteligência Artificial (NLP) e desenvolvido em Python. Este projeto avalia feedbacks de clientes em tempo real, classificando-os como Positivos, Negativos ou Neutros, e gera um dashboard com o nível de satisfação (Customer Satisfaction Score).
 
-## 🚀 Objetivo
+## 🎯 Destaques do Projeto (Arquitetura)
 
-O objetivo deste projeto é fornecer uma interface simples e extensível para empresas que desejam monitorar a satisfação do cliente em larga escala, identificando automaticamente comentários positivos, negativos e neutros.
+O maior diferencial deste projeto é a sua **arquitetura modular**. A regra de negócio (Motor de IA) foi construída utilizando Programação Orientada a Objetos (POO), permitindo que a aplicação rode em duas interfaces completamente diferentes sem duplicação de código:
 
-## 🛠️ Tecnologias e Conceitos
+1. **Interface Web (GUI):** Um dashboard interativo e reativo construído com Streamlit.
+2. **Interface de Terminal (CLI):** Um fluxo iterativo e robusto rodando direto no console.
 
-- **Python 3.x**
-- **POO (Programação Orientada a Objetos):** Utilizada para garantir que o código seja modular, reutilizável e fácil de manter.
-- **TextBlob:** Biblioteca de Processamento de Linguagem Natural (NLP) para análise de polaridade de sentimentos.
-- **JSON Handling:** Exportação de resultados para integração com outras ferramentas.
+## 🛠️ Tecnologias Utilizadas
 
-## 🧠 Estrutura do Código
+- **Python 3.x** - Linguagem principal.
+- **TextBlob** - Biblioteca de Processamento de Linguagem Natural (NLP) para extração de polaridade léxica.
+- **Streamlit** - Framework web para criação da interface gráfica e gestão de estado (Session State).
+- **Git/GitHub** - Versionamento Semântico e controle de código.
 
-O projeto está organizado em classes:
+## 🧠 Soluções de Engenharia (Regras de Negócio)
 
-- `Feedback`: Representa a entidade do comentário do usuário.
-- `Analyzer`: Classe principal que contém o motor de IA e os métodos de processamento de dados.
-
-## 📈 Próximos Passos
-
-- [ ] Implementar suporte para múltiplos idiomas.
-- [ ] Criar uma interface gráfica simples com Streamlit.
-- [ ] Integrar com a API do GPT para resumos automáticos.
+- **Heurística Customizada:** Implementação de penalidade léxica (-0.4 no score) para contornar limitações do modelo _Bag-of-Words_ do TextBlob em frases com conjunções adversativas (ex: _"The app is good, BUT..."_), forçando avaliações mistas para a zona Neutra.
+- **Prevenção de Colisão:** Lógica de validação contínua (via _List Comprehensions_) na versão CLI para impedir a inserção de usuários (IDs) duplicados na base de dados em memória.
+- **Internacionalização (i18n):** Código, variáveis e saídas textuais padronizados em inglês para facilitar a interoperabilidade com bibliotecas globais de NLP.
