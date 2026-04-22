@@ -36,7 +36,7 @@ while counter < limit:
         sleep(2)
 
         new_client = Feedback(user_input, id_num)
-        ia.analisar(new_client)
+        ia.analyse(new_client)
         print("Analysis completed for the current feedback.\n")
 
         counter += 1
