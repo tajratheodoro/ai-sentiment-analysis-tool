@@ -33,6 +33,11 @@ st.sidebar.text(report_text)
 
 st.sidebar.divider()
 
+if st.sidebar.button("🗑️ Clear History"):
+    st.session_state.db.clear_database()
+    st.success("History cleared successfully!")
+    st.rerun()
+
 st.sidebar.subheader("Recent Feedback Analysis")
 history_db = st.session_state.db.get_all_analysis()
 history_db.reverse()
