@@ -23,7 +23,7 @@ st.markdown(
 
         .main-header {
             padding: 1.5rem 0 1rem 0;
-            border-bottom: 1px solid rgba(49, 51, 63, 0.15);
+            border-bottom: 1px solid color-mix(in srgb, var(--text-color) 15%, transparent);
             margin-bottom: 1.5rem;
         }
 
@@ -34,19 +34,29 @@ st.markdown(
         }
 
         .main-header p {
-            color: #5f6b7a;
+            color: var(--text-color);
             font-size: 1.05rem;
             max-width: 760px;
+            opacity: 0.78;
         }
 
         section[data-testid="stSidebar"] {
-            background: #f7f9fc;
-            border-right: 1px solid rgba(49, 51, 63, 0.12);
+            background: var(--secondary-background-color);
+            border-right: 1px solid color-mix(in srgb, var(--text-color) 14%, transparent);
+        }
+
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] span,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] div {
+            color: var(--text-color);
         }
 
         div[data-testid="stTextArea"] textarea {
             border-radius: 8px;
-            border: 1px solid #d7dde8;
+            border: 1px solid color-mix(in srgb, var(--text-color) 18%, transparent);
+            background: var(--background-color);
+            color: var(--text-color);
             min-height: 180px;
         }
 
@@ -68,9 +78,10 @@ st.markdown(
         .history-item {
             padding: 0.55rem 0.65rem;
             margin-bottom: 0.45rem;
-            background: white;
-            border: 1px solid rgba(49, 51, 63, 0.1);
+            background: color-mix(in srgb, var(--secondary-background-color) 82%, var(--text-color) 8%);
+            border: 1px solid color-mix(in srgb, var(--text-color) 14%, transparent);
             border-radius: 8px;
+            color: var(--text-color);
             font-size: 0.92rem;
         }
     </style>
