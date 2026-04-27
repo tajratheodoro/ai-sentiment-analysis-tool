@@ -98,6 +98,34 @@ if "db" not in st.session_state:
 if "id_counter" not in st.session_state:
     st.session_state.id_counter = 101
 
+if "feedback_input" not in st.session_state:
+    st.session_state.feedback_input = ""
+
+if "feedback_message" not in st.session_state:
+    st.session_state.feedback_message = None
+
+
+def submit_feedback():
+    user_input = st.session_state.feedback_input
+
+    if user_input.strip() == "":
+        st.session_state.feedback_message = (
+            "warning",
+            "⚠️ Please enter some feedback before submitting.",
+        )
+        return
+
+    new_client = Feedback(user_input, st.session_state.id_counter)
+    st.session_state.ia.analyse(new_client)
+    st.session_state.id_counter += 1
+    st.session_state.db.save_feedback(user_input, new_client.score)
+    st.session_state.feedback_message = (
+        "success",
+        "✅ Analysis completed for the current feedback. "
+        f"Sentiment score: {new_client.score}",
+    )
+    st.session_state.feedback_input = ""
+
 
 st.markdown(
     """
@@ -113,23 +141,24 @@ st.markdown(
 )
 
 st.subheader("📝 Feedback Analysis")
-user_input = st.text_area(
+st.text_area(
     "Please, enter your feedback:",
     placeholder="Example: The service was fast, friendly, and solved my issue.",
+    key="feedback_input",
 )
 
-if st.button("🚀 Submit Feedback", use_container_width=True):
-    if user_input.strip() == "":
-        st.warning("⚠️ Please enter some feedback before submitting.")
+st.button(
+    "🚀 Submit Feedback",
+    use_container_width=True,
+    on_click=submit_feedback,
+)
+
+if st.session_state.feedback_message:
+    message_type, message_text = st.session_state.feedback_message
+    if message_type == "warning":
+        st.warning(message_text)
     else:
-        new_client = Feedback(user_input, st.session_state.id_counter)
-        st.session_state.ia.analyse(new_client)
-        st.session_state.id_counter += 1
-        st.session_state.db.save_feedback(user_input, new_client.score)
-        st.success(
-            "✅ Analysis completed for the current feedback. "
-            f"Sentiment score: {new_client.score}"
-        )
+        st.success(message_text)
 
 
 st.sidebar.header("📊 Performance Dashboard")
