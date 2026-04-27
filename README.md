@@ -6,7 +6,9 @@ Um sistema completo de análise de sentimentos impulsionado por Inteligência Ar
 
 O maior diferencial deste projeto é a sua **arquitetura modular**. A regra de negócio (Motor de IA) foi construída utilizando Programação Orientada a Objetos (POO), permitindo que a aplicação rode em duas interfaces completamente diferentes sem duplicação de código:
 
-1. **Interface Web (GUI):** Um dashboard interativo e reativo construído com Streamlit.
+1. **Interface Web (GUI):** Um dashboard interativo construído com Streamlit, apresentando:
+   - **Design Responsivo e Temático:** Estilização injetada via CSS customizado com variáveis nativas e `color-mix()`, garantindo adaptação perfeita e automática aos temas Claro e Escuro (Light/Dark mode).
+   - **Visualização de Dados:** Alternância dinâmica entre o histórico textual e gráficos interativos de barras construídos com Altair.
 2. **Interface de Terminal (CLI):** Um fluxo iterativo e robusto rodando direto no console.
 
 ## 🛠️ Tecnologias Utilizadas
@@ -15,12 +17,16 @@ O maior diferencial deste projeto é a sua **arquitetura modular**. A regra de n
 - **TextBlob** - Biblioteca de Processamento de Linguagem Natural (NLP) para extração de polaridade léxica.
 - **Streamlit** - Framework web para criação da interface gráfica e gestão de estado (Session State).
 - **Git/GitHub** - Versionamento Semântico e controle de código.
+- **Altair & Pandas** - Bibliotecas de visualização e manipulação de dados utilizadas para renderizar gráficos interativos no dashboard.
+- **SQLite3** - Banco de dados relacional leve e embutido utilizado para persistência do histórico de análises de forma local.
 
 ## 🧠 Soluções de Engenharia (Regras de Negócio)
 
 - **Heurística Customizada:** Implementação de penalidade léxica (-0.4 no score) para contornar limitações do modelo _Bag-of-Words_ do TextBlob em frases com conjunções adversativas (ex: _"The app is good, BUT..."_), forçando avaliações mistas para a zona Neutra.
 - **Prevenção de Colisão:** Lógica de validação contínua (via _List Comprehensions_) na versão CLI para impedir a inserção de usuários (IDs) duplicados na base de dados em memória.
 - **Internacionalização (i18n):** Código, variáveis e saídas textuais padronizados em inglês para facilitar a interoperabilidade com bibliotecas globais de NLP.
+- **Gestão de Estado Avançada (Callbacks):** Implementação de um fluxo de submissão orientado a eventos no Streamlit. A utilização de callbacks vinculados ao `session_state` permite limpar os campos de input automaticamente e renderizar mensagens de sucesso/erro sem recarregar a página desnecessariamente, melhorando drasticamente a Experiência do Usuário (UX).
+- **Persistência Local (SQLite3):** Integração com um banco de dados relacional local através de uma classe gerenciadora (`DatabaseManager`), permitindo o armazenamento e a recuperação de históricos de feedback entre sessões.
 
 ## 🎯 Casos de Uso
 
