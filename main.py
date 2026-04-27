@@ -1,44 +1,148 @@
 from analyzer import SentimentAnalyzer
+from database import DatabaseManager
 from models import Feedback
-from time import sleep
+
+
+SENTIMENTS = ("Positive", "Neutral", "Negative")
+
+
+def get_next_user_id():
+    return 101 + len(ia.historical_analysis)
+
+
+def submit_feedback():
+    user_input = input("\nPlease, enter your feedback: ").strip()
+
+    if not user_input:
+        print("Warning: Please enter some feedback before submitting.")
+        return
+
+    new_client = Feedback(user_input, get_next_user_id())
+    ia.analyse(new_client)
+    db.save_feedback(user_input, new_client.score)
+
+    print("Analysis completed for the current feedback.")
+    print(f"Sentiment score: {new_client.score}")
+
+
+def view_performance_dashboard():
+    history_db = db.get_all_analysis()
+
+    print("\nPerformance Dashboard")
+
+    if not history_db:
+        print("No feedback has been analyzed yet.")
+        return
+
+    total = len(history_db)
+    positives = len([row for row in history_db if row[2].lower() == "positive"])
+    percentage_positives = (positives / total) * 100
+
+    print("FINAL FEEDBACK ANALYSIS REPORT:")
+    print(f"Total feedbacks analyzed: {total}")
+    print(f"Customer Satisfaction: {percentage_positives:.2f}% positive.")
+
+
+def get_sentiment_counts(history):
+    sentiment_counts = {sentiment: 0 for sentiment in SENTIMENTS}
+
+    for row in history:
+        sentiment = row[2]
+        if sentiment in sentiment_counts:
+            sentiment_counts[sentiment] += 1
+
+    return sentiment_counts
+
+
+def view_feedback_history():
+    history_db = db.get_all_analysis()
+    history_db.reverse()
+
+    print("\nFeedback Analysis History")
+
+    if not history_db:
+        print("No feedback history yet.")
+        return
+
+    for row in history_db:
+        feedback_preview = row[1][:42]
+        if len(row[1]) > 42:
+            feedback_preview += "..."
+
+        print(f"{row[2]} | {feedback_preview} ({row[2]})")
+
+
+def view_sentiment_bar_chart():
+    history_db = db.get_all_analysis()
+    sentiment_counts = get_sentiment_counts(history_db)
+    max_count = max(sentiment_counts.values(), default=0)
+
+    print("\nSentiment Bar Chart")
+
+    if max_count == 0:
+        print("No feedback history yet.")
+        return
+
+    for sentiment in SENTIMENTS:
+        count = sentiment_counts[sentiment]
+        bar = "#" * count
+        print(f"{sentiment:<8} | {bar} {count}")
+
+
+def clear_history():
+    confirmation = input(
+        "\nType 'yes' to clear all feedback analysis history: "
+    ).strip().lower()
+
+    if confirmation != "yes":
+        print("Clear history cancelled.")
+        return
+
+    db.clear_database()
+    ia.historical_analysis.clear()
+    print("History cleared successfully!")
+
+
+MENU_ACTIONS = {
+    "1": submit_feedback,
+    "2": view_performance_dashboard,
+    "3": view_feedback_history,
+    "4": view_sentiment_bar_chart,
+    "5": clear_history,
+}
+
+
+def show_menu():
+    print("\nCustomer Satisfaction Score System")
+    print("1. Submit Feedback")
+    print("2. View Performance Dashboard")
+    print("3. View Feedback Analysis History")
+    print("4. View Sentiment Bar Chart")
+    print("5. Clear History")
+    print("6. Exit")
+
+
+def run_cli():
+    print("Welcome to the customer feedback analysis system!")
+
+    while True:
+        show_menu()
+        option = input("Choose an option: ").strip()
+
+        if option == "6":
+            print("Goodbye!")
+            break
+
+        action = MENU_ACTIONS.get(option)
+        if action:
+            action()
+        else:
+            print("Invalid option. Please choose a number from 1 to 6.")
+
 
 ia = SentimentAnalyzer()
+db = DatabaseManager()
 
-print("Welcome to the customer feedback analysis system!\n")
 
-limit = 3
-counter = 0 
-
-while counter < limit:
-    user_input = input("Please, enter your feedback (or type 'exit' to finish): ")
-    if user_input.lower() == 'exit':
-        break
-
-    valid_user_id = False
-    while not valid_user_id:
-        id_input = input("Please, enter your user ID (numeric): ")
-
-        if id_input.isdigit():
-            id_num = int(id_input)
-
-            existing_ids = [f.user_id for f in ia.historical_analysis]
-
-            if id_num in existing_ids:
-                print("Error: This user ID has already in use! Please choose a different one.")
-            else:
-                valid_user_id = True
-
-        else:
-            print("Invalid user ID. Please enter a numeric value.")
-            continue
-
-        print("Beginning the analysis of customer feedback...\n")
-        sleep(2)
-
-        new_client = Feedback(user_input, id_num)
-        ia.analyse(new_client)
-        print("Analysis completed for the current feedback.\n")
-
-        counter += 1
-
-print(ia.generate_report())
+if __name__ == "__main__":
+    run_cli()
