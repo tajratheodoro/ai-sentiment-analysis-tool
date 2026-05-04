@@ -65,9 +65,21 @@ export default function DocsPage() {
             <CardTitle>What the labels mean</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Meaning sentiment="Positive" text="The customer sounds satisfied, thankful, or happy with the experience." />
-            <Meaning sentiment="Neutral" text="The comment is mixed, unclear, or does not strongly sound happy or unhappy." />
-            <Meaning sentiment="Negative" text="The customer sounds frustrated, disappointed, or unhappy with the experience." />
+            <Meaning
+              sentiment="Positive"
+              text="The customer sounds satisfied, thankful, or happy with the experience."
+              words="Helpful words often include excellent, great, love, perfect, fast, helpful, amazing, satisfied, and thank you."
+            />
+            <Meaning
+              sentiment="Neutral"
+              text="The comment is mixed, unclear, or does not strongly sound happy or unhappy."
+              words="Neutral comments often use balanced words such as okay, fine, average, decent, normal, maybe, or mixed. The word but is important because it usually changes the direction of a sentence, such as 'the app is good, but the checkout is slow.' The app gives that kind of comment extra caution because the customer may be pointing to a problem after the praise."
+            />
+            <Meaning
+              sentiment="Negative"
+              text="The customer sounds frustrated, disappointed, or unhappy with the experience."
+              words="Helpful warning words often include bad, terrible, slow, broken, disappointed, hate, difficult, problem, issue, refund, and never."
+            />
           </CardContent>
         </Card>
 
@@ -112,11 +124,20 @@ export default function DocsPage() {
   );
 }
 
-function Meaning({ sentiment, text }: { sentiment: "Positive" | "Neutral" | "Negative"; text: string }) {
+function Meaning({
+  sentiment,
+  text,
+  words,
+}: {
+  sentiment: "Positive" | "Neutral" | "Negative";
+  text: string;
+  words: string;
+}) {
   return (
     <div className="rounded-md border border-border bg-card p-4">
       <Badge sentiment={sentiment}>{sentiment}</Badge>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">{words}</p>
     </div>
   );
 }

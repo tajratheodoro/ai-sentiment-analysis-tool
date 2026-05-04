@@ -251,11 +251,11 @@ export default function Home() {
               <TabsContent value="history">
                 <div className="max-h-96 space-y-3 overflow-auto pr-1">
                   {history.length ? (
-                    history.map((item) => (
+                    history.map((item, index) => (
                       <article key={item.id ?? item.feedback} className="rounded-md border border-border bg-card p-4">
                         <div className="mb-2 flex items-center justify-between gap-3">
                           <Badge sentiment={item.sentiment}>{item.sentiment}</Badge>
-                          <span className="text-xs text-muted-foreground">#{item.id}</span>
+                          <span className="text-xs text-muted-foreground">#{history.length - index}</span>
                         </div>
                         <p className="whitespace-pre-wrap break-words text-sm leading-6">{item.feedback}</p>
                       </article>
