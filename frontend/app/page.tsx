@@ -133,16 +133,16 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-3 py-5 sm:gap-6 sm:px-6 sm:py-6 lg:px-8">
       <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="flex flex-col justify-between rounded-lg border border-border bg-card/80 p-6 shadow-sm backdrop-blur">
+        <div className="flex flex-col justify-between rounded-lg border border-border bg-card/80 p-4 shadow-sm backdrop-blur sm:p-6">
           <div>
             <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">Customer feedback dashboard</p>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
               Paste a customer comment to see if it sounds positive, neutral, or negative. Use the dashboard to follow satisfaction and recent feedback over time.
             </p>
           </div>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-6 grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:grid-cols-4">
             <Metric label="Total feedbacks analyzed" value={report.total_feedbacks.toString()} />
             <Metric label="Customer Satisfaction" value={`${report.positive_percentage.toFixed(2)}%`} />
             <Metric label="Positive" value={report.positive_count.toString()} />
@@ -163,9 +163,9 @@ export default function Home() {
                 onChange={(event) => setFeedback(event.target.value)}
                 onKeyDown={handleFeedbackKeyDown}
               />
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
                 <span className="text-xs text-muted-foreground">{feedback.trim().length}/2000 characters</span>
-                <Button disabled={loading} type="submit">
+                <Button className="w-full min-[420px]:w-auto" disabled={loading} type="submit">
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                   Analyze Feedback
                 </Button>
@@ -188,7 +188,7 @@ export default function Home() {
 
       <section className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
         <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
+          <CardHeader className="flex-col gap-3 space-y-0 sm:flex-row sm:items-center sm:justify-between">
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" />
               Sentiment Distribution
@@ -268,7 +268,7 @@ export default function Home() {
                 </div>
               </TabsContent>
               <TabsContent value="metrics">
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3 min-[420px]:grid-cols-2">
                   <Metric label="Neutral count" value={report.neutral_count.toString()} />
                   <Metric label="Positive percentage" value={`${report.positive_percentage.toFixed(2)}%`} />
                   <Metric label="Positive count" value={report.positive_count.toString()} />

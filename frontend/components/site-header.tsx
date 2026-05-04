@@ -31,7 +31,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/88 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-3 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <Link className="flex min-w-0 items-center gap-3" href="/">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">
             CS
@@ -41,20 +41,20 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="flex flex-wrap items-center gap-2">
-          <Button asChild variant="ghost" className="px-3">
+        <nav className="grid grid-cols-2 gap-2 min-[460px]:flex min-[460px]:flex-wrap min-[460px]:items-center">
+          <Button asChild variant="ghost" className="px-2 sm:px-3">
             <Link href="/">
               <Home className="h-4 w-4" />
               Dashboard
             </Link>
           </Button>
-          <Button asChild variant="ghost" className="px-3">
+          <Button asChild variant="ghost" className="px-2 sm:px-3">
             <Link href="/docs">
               <FileText className="h-4 w-4" />
-              How it works
+              How is works?
             </Link>
           </Button>
-          <Button asChild variant="outline" className="px-3">
+          <Button asChild variant="outline" className="px-2 sm:px-3">
             <a href={LINKEDIN_URL} rel="noreferrer" target="_blank">
               <Linkedin className="h-4 w-4" />
               LinkedIn

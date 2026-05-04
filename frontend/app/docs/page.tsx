@@ -25,15 +25,15 @@ const steps = [
 
 export default function DocsPage() {
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-      <section className="rounded-lg border border-border bg-card/80 p-6 shadow-sm backdrop-blur">
+    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-5 px-3 py-5 sm:gap-6 sm:px-6 sm:py-6 lg:px-8">
+      <section className="rounded-lg border border-border bg-card/80 p-4 shadow-sm backdrop-blur sm:p-6">
         <Button asChild variant="ghost" className="mb-5 px-0">
           <Link href="/">
             <ArrowLeft className="h-4 w-4" />
             Back to dashboard
           </Link>
         </Button>
-        <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">How it works</p>
+        <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">How is works?</p>
         <h1 className="font-display text-3xl font-bold leading-tight sm:text-4xl">A simple guide for reading customer feedback</h1>
         <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground">
           This app helps you quickly understand whether customer comments sound happy, mixed, or unhappy. You do not need to know how the technology works to use it.
@@ -90,19 +90,31 @@ export default function DocsPage() {
               How to read the dashboard
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm leading-6 text-muted-foreground">
-            <p>
-              <strong className="text-foreground">Total feedbacks analyzed</strong> shows how many comments are saved.
-            </p>
-            <p>
-              <strong className="text-foreground">Customer Satisfaction</strong> shows the percentage of saved comments that were marked Positive.
-            </p>
-            <p>
-              The bar chart compares Positive, Neutral, and Negative comments so patterns are easier to spot.
-            </p>
-            <p>
-              Recent Feedback keeps the latest comments visible, with a label beside each one.
-            </p>
+          <CardContent className="grid gap-3 text-sm leading-6 text-muted-foreground sm:grid-cols-2">
+            <DashboardGuide
+              title="Feedback form"
+              text="Paste one customer comment in the text box and press Analyze Feedback. You can also press Enter to send it. Use Shift+Enter only if you want a new line."
+            />
+            <DashboardGuide
+              title="Result message"
+              text="After the analysis, the message shows the chosen label. Green means Positive, yellow means Neutral, and red means Negative."
+            />
+            <DashboardGuide
+              title="Metric cards"
+              text="Total feedbacks analyzed shows how many saved comments are in the current history. Customer Satisfaction is the percentage of comments marked Positive."
+            />
+            <DashboardGuide
+              title="Sentiment counts"
+              text="Positive, Neutral, and Negative count how many comments are in each group. Use these numbers to see whether the overall feedback is improving or getting worse."
+            />
+            <DashboardGuide
+              title="Bar chart"
+              text="The chart compares the three groups side by side. The tallest bar shows the type of feedback that appears most often."
+            />
+            <DashboardGuide
+              title="Recent Feedback"
+              text="This list shows the saved comments from newest to oldest. The number beside each row is the position in the current list, so the oldest saved comment is #1."
+            />
           </CardContent>
         </Card>
       </section>
@@ -138,6 +150,15 @@ function Meaning({
       <Badge sentiment={sentiment}>{sentiment}</Badge>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">{words}</p>
+    </div>
+  );
+}
+
+function DashboardGuide({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-md border border-border bg-card p-4">
+      <p className="font-semibold text-foreground">{title}</p>
+      <p className="mt-2">{text}</p>
     </div>
   );
 }
