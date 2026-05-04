@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Analysis, Report, analyzeFeedback, clearHistory, getHistory, getReport } from "@/lib/api";
+import { Analysis, Report, Sentiment, analyzeFeedback, clearHistory, getHistory, getReport } from "@/lib/api";
 
 const feedbackSchema = z
   .string()
@@ -36,6 +36,13 @@ const emptyReport: Report = {
   positive_percentage: 0,
 };
 
+const successAlertStyles: Record<Sentiment | "Default", string> = {
+  Positive: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-200",
+  Neutral: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-400/30 dark:bg-amber-500/15 dark:text-amber-200",
+  Negative: "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-400/30 dark:bg-rose-500/15 dark:text-rose-200",
+  Default: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-200",
+};
+
 export default function Home() {
   const [feedback, setFeedback] = useState("");
   const [history, setHistory] = useState<Analysis[]>([]);
@@ -44,6 +51,7 @@ export default function Home() {
   const [clearing, setClearing] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [successSentiment, setSuccessSentiment] = useState<Sentiment | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   async function refreshDashboard() {
@@ -71,6 +79,7 @@ export default function Home() {
     event.preventDefault();
     setError("");
     setSuccess("");
+    setSuccessSentiment(null);
 
     const parsed = feedbackSchema.safeParse(feedback);
     if (!parsed.success) {
@@ -83,6 +92,7 @@ export default function Home() {
       const result = await analyzeFeedback(parsed.data);
       setFeedback("");
       setSuccess(`Analysis completed: ${result.sentiment}`);
+      setSuccessSentiment(result.sentiment);
       try {
         await refreshDashboard();
       } catch {
@@ -114,6 +124,7 @@ export default function Home() {
       setHistory([]);
       setReport(emptyReport);
       setSuccess("History cleared successfully.");
+      setSuccessSentiment(null);
     } catch {
       setError("Unable to clear history right now.");
     } finally {
@@ -161,7 +172,7 @@ export default function Home() {
               </div>
             </form>
             {success ? (
-              <Alert className="mt-4 border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-200">
+              <Alert className={`mt-4 ${successAlertStyles[successSentiment ?? "Default"]}`}>
                 {success}
               </Alert>
             ) : null}
