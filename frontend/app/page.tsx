@@ -133,16 +133,16 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-3 px-3 py-3 sm:gap-4 sm:px-5 sm:py-4 lg:px-6">
-      <section className="grid gap-3 lg:grid-cols-[1.08fr_0.92fr]">
-        <div className="flex flex-col justify-between rounded-lg border border-border bg-card/80 p-3 shadow-sm backdrop-blur sm:p-4">
+    <main className="mx-auto flex min-h-[calc(100vh-8.75rem)] w-full max-w-7xl flex-col gap-4 px-3 py-4 sm:min-h-[calc(100vh-5.25rem)] sm:gap-5 sm:px-5 sm:py-5 lg:px-7">
+      <section className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="flex flex-col justify-between rounded-lg border border-border bg-card/80 p-4 shadow-sm backdrop-blur sm:p-5">
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">Customer feedback dashboard</p>
-            <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+            <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
               Paste a customer comment to see if it sounds positive, neutral, or negative. Use the dashboard to follow satisfaction and recent feedback over time.
             </p>
           </div>
-          <div className="mt-4 grid grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:grid-cols-4">
+          <div className="mt-5 grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:grid-cols-4">
             <Metric label="Total feedbacks analyzed" value={report.total_feedbacks.toString()} />
             <Metric label="Customer Satisfaction" value={`${report.positive_percentage.toFixed(2)}%`} />
             <Metric label="Positive" value={report.positive_count.toString()} />
@@ -151,13 +151,13 @@ export default function Home() {
         </div>
 
         <Card>
-          <CardHeader className="p-4 pb-2">
+          <CardHeader className="p-5 pb-3">
             <CardTitle>Analyze Feedback</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-0">
+          <CardContent className="p-5 pt-0">
             <form className="space-y-3" onSubmit={handleSubmit}>
               <Textarea
-                className="min-h-24 sm:min-h-28"
+                className="min-h-28 sm:min-h-32"
                 maxLength={2000}
                 placeholder="Paste customer feedback here..."
                 value={feedback}
@@ -187,16 +187,16 @@ export default function Home() {
         </Card>
       </section>
 
-      <section className="grid gap-3 lg:grid-cols-[0.88fr_1.12fr]">
+      <section className="grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
         <Card>
-          <CardHeader className="flex-col gap-2 space-y-0 p-4 pb-2 sm:flex-row sm:items-center sm:justify-between">
+          <CardHeader className="flex-col gap-2 space-y-0 p-5 pb-3 sm:flex-row sm:items-center sm:justify-between">
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" />
               Sentiment Distribution
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <div className="h-52 sm:h-56">
+          <CardContent className="p-5 pt-0">
+            <div className="h-56 sm:h-60">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ left: -18, right: 8, top: 10, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -215,7 +215,7 @@ export default function Home() {
         </Card>
 
         <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0 p-4 pb-2">
+          <CardHeader className="flex-row items-center justify-between space-y-0 p-5 pb-3">
             <CardTitle>Recent Feedback</CardTitle>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
@@ -243,17 +243,17 @@ export default function Home() {
               </DialogContent>
             </Dialog>
           </CardHeader>
-          <CardContent className="p-4 pt-0">
+          <CardContent className="p-5 pt-0">
             <Tabs defaultValue="history">
               <TabsList>
                 <TabsTrigger value="history">History</TabsTrigger>
                 <TabsTrigger value="metrics">Metrics</TabsTrigger>
               </TabsList>
               <TabsContent value="history">
-                <div className="max-h-64 space-y-2 overflow-auto pr-1">
+                <div className="max-h-72 space-y-3 overflow-auto pr-1">
                   {history.length ? (
                     history.map((item, index) => (
-                      <article key={item.id ?? item.feedback} className="rounded-md border border-border bg-card p-3">
+                      <article key={item.id ?? item.feedback} className="rounded-md border border-border bg-card p-4">
                         <div className="mb-2 flex items-center justify-between gap-3">
                           <Badge sentiment={item.sentiment}>{item.sentiment}</Badge>
                           <span className="text-xs text-muted-foreground">#{history.length - index}</span>
@@ -269,7 +269,7 @@ export default function Home() {
                 </div>
               </TabsContent>
               <TabsContent value="metrics">
-                <div className="grid gap-2 min-[420px]:grid-cols-2">
+                <div className="grid gap-3 min-[420px]:grid-cols-2">
                   <Metric label="Neutral count" value={report.neutral_count.toString()} />
                   <Metric label="Positive percentage" value={`${report.positive_percentage.toFixed(2)}%`} />
                   <Metric label="Positive count" value={report.positive_count.toString()} />
@@ -286,9 +286,9 @@ export default function Home() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border bg-card/75 p-3">
-      <p className="text-[0.68rem] font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
-      <p className="mt-1 text-xl font-bold">{value}</p>
+    <div className="rounded-md border border-border bg-card/75 p-4">
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-2 text-2xl font-bold">{value}</p>
     </div>
   );
 }
