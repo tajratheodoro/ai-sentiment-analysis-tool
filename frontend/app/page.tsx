@@ -115,14 +115,11 @@ export default function Home() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
       <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="flex flex-col justify-between rounded-lg border border-border bg-white/80 p-6 shadow-sm backdrop-blur">
+        <div className="flex flex-col justify-between rounded-lg border border-border bg-card/80 p-6 shadow-sm backdrop-blur">
           <div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">AI/NLP feedback intelligence</p>
-            <h1 className="font-display text-4xl font-bold leading-tight sm:text-5xl">
-              Customer Satisfaction Score System
-            </h1>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">Customer feedback dashboard</p>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Analyze customer feedback with the existing Python NLP engine and track sentiment trends in one focused dashboard.
+              Paste a customer comment to see if it sounds positive, neutral, or negative. Use the dashboard to follow satisfaction and recent feedback over time.
             </p>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -153,9 +150,13 @@ export default function Home() {
                 </Button>
               </div>
             </form>
-            {success ? <Alert className="mt-4 border-emerald-200 bg-emerald-50 text-emerald-800">{success}</Alert> : null}
+            {success ? (
+              <Alert className="mt-4 border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-200">
+                {success}
+              </Alert>
+            ) : null}
             {error ? (
-              <Alert className="mt-4 border-rose-200 bg-rose-50 text-rose-800">
+              <Alert className="mt-4 border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-400/30 dark:bg-rose-500/15 dark:text-rose-200">
                 <AlertCircle className="mr-2 inline h-4 w-4" />
                 {error}
               </Alert>
@@ -230,7 +231,7 @@ export default function Home() {
                 <div className="max-h-96 space-y-3 overflow-auto pr-1">
                   {history.length ? (
                     history.map((item) => (
-                      <article key={item.id ?? item.feedback} className="rounded-md border border-border bg-white p-4">
+                      <article key={item.id ?? item.feedback} className="rounded-md border border-border bg-card p-4">
                         <div className="mb-2 flex items-center justify-between gap-3">
                           <Badge sentiment={item.sentiment}>{item.sentiment}</Badge>
                           <span className="text-xs text-muted-foreground">#{item.id}</span>
@@ -263,7 +264,7 @@ export default function Home() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border bg-white/75 p-4">
+    <div className="rounded-md border border-border bg-card/75 p-4">
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
       <p className="mt-2 text-2xl font-bold">{value}</p>
     </div>

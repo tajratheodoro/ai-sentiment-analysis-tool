@@ -18,6 +18,21 @@
   --radius: 0.5rem;
 }
 
+.dark {
+  --background: 214 28% 10%;
+  --foreground: 42 24% 92%;
+  --card: 214 25% 14%;
+  --card-foreground: 42 24% 92%;
+  --muted: 214 20% 20%;
+  --muted-foreground: 216 14% 68%;
+  --border: 214 18% 25%;
+  --primary: 176 58% 44%;
+  --primary-foreground: 214 28% 9%;
+  --destructive: 358 68% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 176 58% 44%;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -30,6 +45,13 @@ body {
     hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: Aptos, "Segoe UI", sans-serif;
+}
+
+.dark body {
+  background:
+    linear-gradient(135deg, rgba(39, 190, 181, 0.1), transparent 34%),
+    linear-gradient(315deg, rgba(217, 102, 74, 0.1), transparent 38%),
+    hsl(var(--background));
 }
 
 button,
