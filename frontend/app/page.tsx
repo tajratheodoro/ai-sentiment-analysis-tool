@@ -96,6 +96,15 @@ export default function Home() {
     }
   }
 
+  function handleFeedbackKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key !== "Enter" || event.shiftKey) return;
+
+    event.preventDefault();
+    if (!loading) {
+      event.currentTarget.form?.requestSubmit();
+    }
+  }
+
   async function handleClearHistory() {
     setClearing(true);
     setError("");
@@ -141,6 +150,7 @@ export default function Home() {
                 placeholder="Paste customer feedback here..."
                 value={feedback}
                 onChange={(event) => setFeedback(event.target.value)}
+                onKeyDown={handleFeedbackKeyDown}
               />
               <div className="flex items-center justify-between gap-3">
                 <span className="text-xs text-muted-foreground">{feedback.trim().length}/2000 characters</span>
