@@ -1,8 +1,9 @@
+import os
 import sqlite3
 
 class DatabaseManager:
     def __init__(self, db_name="feedback_analysis.db"):
-        self.db_name = db_name
+        self.db_name = os.getenv("SENTIMENT_DB_PATH", db_name)
         self.setup_database()
 
     def setup_database(self):
@@ -26,6 +27,14 @@ class DatabaseManager:
                        """, (feedback, sentiment))
         conn.commit()
         conn.close()
+
+    def get_latest_id(self):
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+        cursor.execute("SELECT MAX(id) FROM historical_analysis")
+        latest_id = cursor.fetchone()[0]
+        conn.close()
+        return latest_id
     
     def get_all_analysis(self):
         conn = sqlite3.connect(self.db_name)

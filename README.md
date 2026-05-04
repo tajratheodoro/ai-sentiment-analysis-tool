@@ -1,47 +1,168 @@
-# 🤖 AI Customer Sentiment Analyzer
+# AI Customer Sentiment Analyzer
 
-Um sistema completo de análise de sentimentos impulsionado por Inteligência Artificial (NLP) e desenvolvido em Python. Este projeto avalia feedbacks de clientes em tempo real, classificando-os como Positivos, Negativos ou Neutros, e gera um dashboard com o nível de satisfação (Customer Satisfaction Score).
+Aplicacao de analise de sentimentos para feedbacks de clientes. O Streamlit foi tratado como prototipo funcional e substituido por uma arquitetura profissional com frontend Next.js e backend FastAPI, preservando a logica Python existente.
 
-## 🎯 Destaques do Projeto (Arquitetura)
+## Arquitetura
 
-O maior diferencial deste projeto é a sua **arquitetura modular**. A regra de negócio (Motor de IA) foi construída utilizando Programação Orientada a Objetos (POO), permitindo que a aplicação rode em duas interfaces completamente diferentes sem duplicação de código:
+Antes:
+- `app.py`: prototipo Streamlit.
+- `main.py`: CLI.
+- `analyzer.py`: analise de sentimento com TextBlob.
+- `database.py`: persistencia SQLite.
+- `models.py`: modelo `Feedback`.
 
-1. **Interface Web (GUI):** Um dashboard interativo construído com Streamlit, apresentando:
-   - **Design Responsivo e Temático:** Estilização injetada via CSS customizado com variáveis nativas e `color-mix()`, garantindo adaptação perfeita e automática aos temas Claro e Escuro (Light/Dark mode).
-   - **Visualização de Dados:** Alternância dinâmica entre o histórico textual e gráficos interativos de barras construídos com Altair.
-2. **Interface de Terminal (CLI):** Uma aplicação de console completa baseada no padrão de projeto _Dispatcher_ (via dicionários em Python), oferecendo:
-   - **Menu Interativo:** Fluxo contínuo de navegação com opções de submissão, painel de performance e limpeza de dados.
-   - **Gráficos em Texto (ASCII):** Geração dinâmica de gráficos de barras diretamente no terminal para visualização rápida da distribuição de sentimentos.
-   - **Integração com Banco de Dados:** Persistência total e recuperação de dados via SQLite3 diretamente pelo console.
+Agora:
+- `frontend/`: aplicacao Next.js + TypeScript + Tailwind CSS + componentes estilo shadcn/ui + Recharts.
+- `backend/`: API FastAPI que reutiliza `SentimentAnalyzer`, `DatabaseManager` e `Feedback`.
+- `main.py`: CLI preservada.
+- `app.py`: legado, fora do fluxo principal.
 
-## 🛠️ Tecnologias Utilizadas
+Fluxo:
 
-- **Python 3.x** - Linguagem principal.
-- **TextBlob** - Biblioteca de Processamento de Linguagem Natural (NLP) para extração de polaridade léxica.
-- **Streamlit** - Framework web para criação da interface gráfica e gestão de estado (Session State).
-- **Git/GitHub** - Versionamento Semântico e controle de código.
-- **Altair & Pandas** - Bibliotecas de visualização e manipulação de dados utilizadas para renderizar gráficos interativos no dashboard.
-- **SQLite3** - Banco de dados relacional leve e embutido utilizado para persistência do histórico de análises de forma local.
+```text
+Frontend Next.js -> FastAPI -> SentimentAnalyzer -> DatabaseManager -> SQLite
+```
 
-## 🧠 Soluções de Engenharia (Regras de Negócio)
+## Estrutura de Pastas
 
-- **Heurística Customizada:** Implementação de penalidade léxica (-0.4 no score) para contornar limitações do modelo _Bag-of-Words_ do TextBlob em frases com conjunções adversativas (ex: _"The app is good, BUT..."_), forçando avaliações mistas para a zona Neutra.
-- **Geração Automática de Entidades:** Implementação de uma lógica de auto-incremento baseada no tamanho do histórico (ex: `101 + len(history)`), eliminando a necessidade de validação manual de colisão de IDs e melhorando a fluidez da experiência do usuário na submissão de feedbacks.
-- **Internacionalização (i18n):** Código, variáveis e saídas textuais padronizados em inglês para facilitar a interoperabilidade com bibliotecas globais de NLP.
-- **Gestão de Estado Avançada (Callbacks):** Implementação de um fluxo de submissão orientado a eventos no Streamlit. A utilização de callbacks vinculados ao `session_state` permite limpar os campos de input automaticamente e renderizar mensagens de sucesso/erro sem recarregar a página desnecessariamente, melhorando drasticamente a Experiência do Usuário (UX).
-- **Persistência Local (SQLite3):** Integração com um banco de dados relacional local através de uma classe gerenciadora (`DatabaseManager`), permitindo o armazenamento e a recuperação de históricos de feedback entre sessões.
+```text
+backend/
+  main.py
+  schemas.py
+  services.py
+frontend/
+  app/
+  components/ui/
+  lib/api.ts
+analyzer.py
+database.py
+models.py
+main.py
+app.py
+```
 
-## 🎯 Casos de Uso
+## Backend FastAPI
 
-Esta ferramenta foi projetada para ser versátil, atendendo tanto ao setor privado quanto a iniciativas de modernização pública:
+Instalar dependencias Python:
 
-### 🏛️ Análise de Dados Governamentais (GovTech)
-* **Ouvidoria Digital:** Processamento automático de grandes volumes de feedbacks de cidadãos sobre serviços públicos, identificando áreas críticas que necessitam de intervenção imediata.
-* **Monitoramento de Clima Social:** Análise de sentimento em redes sociais ou formulários de consulta pública para medir a aceitação de novos projetos de infraestrutura ou políticas governamentais.
+```powershell
+python -m pip install -r requirements.txt
+```
 
-### 📈 Inteligência de Mercado e Investimentos
-* **Atração de Investimentos:** Monitoramento do sentimento de investidores estrangeiros em relação ao ecossistema econômico local, auxiliando agências de desenvolvimento a ajustar suas narrativas de captação.
-* **Customer Experience (CX) para Startups:** Implementação em dashboards de SaaS para que empresas parceiras do estado possam monitorar a saúde da relação com seus clientes de forma automatizada.
+Rodar API:
 
-### 🔬 Pesquisa e Desenvolvimento
-* Utilização como base para estudos acadêmicos em Processamento de Linguagem Natural (NLP) e para a validação de modelos de IA aplicados à língua portuguesa e inglesa.
+```powershell
+python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Documentacao da API:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+## Frontend Next.js
+
+Instalar dependencias Node:
+
+```powershell
+cd frontend
+npm install
+```
+
+Rodar frontend:
+
+```powershell
+npm run dev
+```
+
+Acessar:
+
+```text
+http://localhost:3000
+```
+
+Configure a URL da API com:
+
+```text
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+```
+
+Um exemplo esta em `frontend/.env.example`.
+
+## Endpoints
+
+### POST `/api/analyze`
+
+Analisa e salva um feedback.
+
+Request:
+
+```json
+{ "feedback": "The service was excellent." }
+```
+
+Response:
+
+```json
+{
+  "id": 1,
+  "feedback": "The service was excellent.",
+  "sentiment": "Positive"
+}
+```
+
+Validacoes:
+- texto obrigatorio;
+- trim;
+- minimo de 3 caracteres;
+- maximo de 2000 caracteres.
+
+### GET `/api/history`
+
+Retorna o historico salvo, do mais recente para o mais antigo.
+
+### GET `/api/report`
+
+Retorna metricas agregadas.
+
+Response:
+
+```json
+{
+  "total_feedbacks": 3,
+  "positive_count": 1,
+  "neutral_count": 1,
+  "negative_count": 1,
+  "positive_percentage": 33.33
+}
+```
+
+### DELETE `/api/history`
+
+Limpa o historico salvo no SQLite.
+
+## Seguranca
+
+Medidas aplicadas:
+- validacao no frontend com Zod;
+- validacao no backend com Pydantic;
+- limite de 2000 caracteres;
+- feedbacks renderizados como texto puro no React;
+- `dangerouslySetInnerHTML` nao utilizado;
+- CORS restrito a `localhost:3000` e `127.0.0.1:3000`, configuravel por `ALLOWED_ORIGINS`;
+- erros tratados sem expor stack trace ao usuario;
+- URL da API configuravel por variavel de ambiente;
+- `.gitignore` ignora banco local, `.env`, builds, `node_modules` e `__pycache__`.
+
+Recomendacoes futuras:
+- adicionar autenticacao;
+- adicionar rate limiting;
+- usar PostgreSQL em producao;
+- configurar HTTPS;
+- adicionar logs estruturados sem feedback completo;
+- adicionar testes automatizados de API e frontend.
+
+## Streamlit Legado
+
+`app.py` permanece no repositorio apenas como referencia do prototipo original. A interface principal agora e `frontend/` consumindo `backend/`.

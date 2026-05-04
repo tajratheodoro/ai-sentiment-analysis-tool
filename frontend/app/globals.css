@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 43 33% 96%;
+  --foreground: 214 28% 13%;
+  --card: 0 0% 100%;
+  --card-foreground: 214 28% 13%;
+  --muted: 42 22% 90%;
+  --muted-foreground: 215 13% 38%;
+  --border: 214 16% 86%;
+  --primary: 177 72% 28%;
+  --primary-foreground: 0 0% 100%;
+  --destructive: 358 72% 45%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 177 72% 28%;
+  --radius: 0.5rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(18, 132, 125, 0.13), transparent 34%),
+    linear-gradient(315deg, rgba(202, 91, 54, 0.12), transparent 38%),
+    hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: Aptos, "Segoe UI", sans-serif;
+}
+
+button,
+textarea {
+  font: inherit;
+}
