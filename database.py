@@ -49,5 +49,6 @@ class DatabaseManager:
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
         cursor.execute("DELETE FROM historical_analysis")
+        cursor.execute("DELETE FROM sqlite_sequence WHERE name = ?", ("historical_analysis",))
         conn.commit()
         conn.close()
