@@ -1,110 +1,129 @@
 # AI Customer Sentiment Analyzer
 
-Aplicacao de analise de sentimentos para feedbacks de clientes com frontend Next.js, backend FastAPI e persistencia SQLite local.
+Aplicacao full stack de analise de sentimentos para feedbacks de clientes. O projeto usa Python no backend, tecnicas simples de IA/NLP com TextBlob, API REST com FastAPI, persistencia em SQLite e uma interface web em Next.js.
+
+O objetivo deste projeto e demonstrar, de forma pratica, como transformar comentarios de clientes em indicadores de satisfacao: o usuario envia um feedback, a API classifica o sentimento como positivo, neutro ou negativo, salva o resultado e exibe metricas em um dashboard.
+
+## O que este projeto demonstra
+
+- Backend Python organizado em camadas, com separacao entre API, regras de negocio e persistencia.
+- Uso de FastAPI para expor endpoints REST documentados automaticamente.
+- Validacao de dados com Pydantic no backend e Zod no frontend.
+- Aplicacao de NLP/IA com TextBlob para estimar polaridade de textos.
+- Regra complementar para tratar feedbacks ambiguos com a palavra `but`.
+- Persistencia local com SQLite, incluindo historico e relatorio agregado.
+- Frontend moderno consumindo uma API real, com dashboard, grafico e historico.
+- Cuidados basicos de seguranca, como CORS restrito, limite de caracteres e tratamento de erros.
+
+## Funcionalidades
+
+- Analisar feedbacks de clientes em texto livre.
+- Classificar cada feedback como `Positive`, `Neutral` ou `Negative`.
+- Salvar historico das analises em SQLite.
+- Exibir total de feedbacks, percentual positivo e distribuicao por sentimento.
+- Limpar o historico quando necessario.
+- Rodar pelo navegador ou pela CLI.
+
+## Stack tecnica
+
+| Area | Tecnologias |
+| --- | --- |
+| Backend | Python, FastAPI, Pydantic |
+| IA/NLP | TextBlob |
+| Banco de dados | SQLite |
+| Frontend | Next.js, React, TypeScript, Tailwind CSS |
+| Visualizacao | Recharts |
+| Dev local | Uvicorn, scripts npm, variaveis de ambiente |
 
 ## Arquitetura
-
-- `frontend/`: aplicacao Next.js + TypeScript + Tailwind CSS + componentes estilo shadcn/ui + Recharts.
-- `backend/`: API FastAPI, CLI e core Python de analise/persistencia.
-- `backend/core/`: analisador TextBlob, acesso SQLite e modelo `Feedback`.
-- `backend/cli.py`: CLI preservada para uso via terminal.
-
-Fluxo:
 
 ```text
 Frontend Next.js -> FastAPI -> backend/core -> SQLite
 ```
 
-## Estrutura de Pastas
+O backend fica concentrado em `backend/`:
 
 ```text
 backend/
   core/
-    analyzer.py
-    database.py
-    models.py
-  cli.py
-  main.py
-  schemas.py
-  services.py
+    analyzer.py    # analise de sentimento com TextBlob
+    database.py    # acesso SQLite e consultas agregadas
+    models.py      # modelo simples de feedback
+  cli.py           # interface de terminal
+  main.py          # aplicacao FastAPI e rotas HTTP
+  schemas.py       # contratos Pydantic de entrada e saida
+  services.py      # orquestracao entre API, core e banco
+```
+
+O frontend fica em `frontend/` e consome os endpoints da API:
+
+```text
 frontend/
   app/
   components/ui/
   lib/api.ts
 ```
 
-## Backend FastAPI
+## Como rodar
 
-Instalar dependencias Python:
+### 1. Instalar dependencias Python
 
 ```powershell
 python -m pip install -r requirements.txt
 ```
 
-Rodar API:
-
-```powershell
-python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
-```
-
-Documentacao da API:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-## Frontend Next.js
-
-Instalar dependencias Node:
+### 2. Instalar dependencias do frontend
 
 ```powershell
 cd frontend
 npm install
 ```
 
-Rodar frontend:
+### 3. Rodar o projeto completo
 
 ```powershell
 npm run dev
 ```
 
-O comando acima tambem inicia a API FastAPI local automaticamente quando ela ainda nao estiver rodando.
+Esse comando inicia o frontend em `http://localhost:3000` e tambem sobe a API FastAPI local em `http://127.0.0.1:8000` quando ela ainda nao estiver rodando.
 
-Acessar:
+### Rodar apenas a API
 
-```text
-http://localhost:3000
+```powershell
+python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Configure a URL da API com:
+A documentacao interativa da API fica em:
 
 ```text
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+http://127.0.0.1:8000/docs
 ```
 
-Um exemplo esta em `frontend/.env.example`.
-
-## CLI
-
-Rodar a CLI preservada:
+### Rodar a CLI
 
 ```powershell
 python -m backend.cli
 ```
 
-## Endpoints
+## Endpoints principais
 
-### POST `/api/analyze`
+| Metodo | Rota | Descricao |
+| --- | --- | --- |
+| `GET` | `/api/health` | Verifica se a API esta online |
+| `POST` | `/api/analyze` | Analisa e salva um feedback |
+| `GET` | `/api/history` | Lista o historico do mais recente para o mais antigo |
+| `GET` | `/api/report` | Retorna metricas agregadas |
+| `DELETE` | `/api/history` | Limpa o historico |
 
-Analisa e salva um feedback.
-
-Request:
+Exemplo de request para analise:
 
 ```json
-{ "feedback": "The service was excellent." }
+{
+  "feedback": "The service was excellent."
+}
 ```
 
-Response:
+Exemplo de response:
 
 ```json
 {
@@ -114,53 +133,31 @@ Response:
 }
 ```
 
-Validacoes:
-- texto obrigatorio;
-- trim;
-- minimo de 3 caracteres;
-- maximo de 2000 caracteres.
+## Decisoes tecnicas
 
-### GET `/api/history`
+- **FastAPI** foi escolhido por ser simples, performatico e adequado para APIs Python modernas.
+- **TextBlob** permite demonstrar NLP de forma objetiva, sem depender de modelos pesados.
+- **SQLite** atende bem ao contexto local do projeto e facilita avaliacao por recrutadores.
+- **Camadas no backend** deixam o codigo mais legivel: rotas, schemas, servico, core e banco.
+- **Next.js + TypeScript** mostram consumo real da API e cuidado com experiencia do usuario.
 
-Retorna o historico salvo, do mais recente para o mais antigo.
+## Seguranca e qualidade
 
-### GET `/api/report`
+- Entrada limitada a 2000 caracteres.
+- Validacao no frontend e no backend.
+- CORS configurado para ambiente local.
+- Erros tratados sem expor stack trace para o usuario.
+- Banco local e arquivos de ambiente ignorados pelo Git.
+- Dashboard renderiza feedbacks como texto, sem uso de `dangerouslySetInnerHTML`.
 
-Retorna metricas agregadas.
+## Proximos passos
 
-Response:
+- Adicionar testes automatizados de backend e frontend.
+- Adicionar autenticacao para uso com multiplos usuarios.
+- Evoluir de SQLite para PostgreSQL em ambiente de producao.
+- Criar logs estruturados sem armazenar feedback sensivel completo.
+- Publicar uma versao deployada para demonstracao online.
 
-```json
-{
-  "total_feedbacks": 3,
-  "positive_count": 1,
-  "neutral_count": 1,
-  "negative_count": 1,
-  "positive_percentage": 33.33
-}
-```
+## Perfil do projeto
 
-### DELETE `/api/history`
-
-Limpa o historico salvo no SQLite.
-
-## Seguranca
-
-Medidas aplicadas:
-- validacao no frontend com Zod;
-- validacao no backend com Pydantic;
-- limite de 2000 caracteres;
-- feedbacks renderizados como texto puro no React;
-- `dangerouslySetInnerHTML` nao utilizado;
-- CORS restrito a `localhost:3000` e `127.0.0.1:3000`, configuravel por `ALLOWED_ORIGINS`;
-- erros tratados sem expor stack trace ao usuario;
-- URL da API configuravel por variavel de ambiente;
-- `.gitignore` ignora banco local, `.env`, builds, `node_modules` e `__pycache__`.
-
-Recomendacoes futuras:
-- adicionar autenticacao;
-- adicionar rate limiting;
-- usar PostgreSQL em producao;
-- configurar HTTPS;
-- adicionar logs estruturados sem feedback completo;
-- adicionar testes automatizados de API e frontend.
+Este projeto foi pensado para demonstrar fundamentos importantes para uma vaga de estagio ou junior com Python e IA: organizacao de codigo, criacao de API, validacao de dados, uso pratico de NLP, persistencia, integracao com frontend e capacidade de evoluir um prototipo para uma estrutura mais profissional.
