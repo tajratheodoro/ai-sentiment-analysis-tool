@@ -29,16 +29,18 @@ export default function DocsPage() {
       <section className="relative overflow-hidden rounded-lg border border-border/80 bg-card/88 p-5 shadow-[0_18px_70px_-45px_hsl(var(--primary)/0.65)] backdrop-blur sm:p-7">
         <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-accent/12 blur-3xl" />
         <div className="relative">
-          <Button asChild variant="ghost" className="mb-5 px-0">
-            <Link href="/">
-              <ArrowLeft className="h-4 w-4" />
-              Back to dashboard
-            </Link>
-          </Button>
-          <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-            <Sparkles className="h-3.5 w-3.5" />
-            How it works
-          </p>
+          <div className="mb-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <Button asChild variant="ghost" className="px-0">
+              <Link href="/">
+                <ArrowLeft className="h-4 w-4" />
+                Back to dashboard
+              </Link>
+            </Button>
+            <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+              <Sparkles className="h-3.5 w-3.5" />
+              How it works
+            </p>
+          </div>
           <h1 className="font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
             A clear guide for reading customer feedback
           </h1>

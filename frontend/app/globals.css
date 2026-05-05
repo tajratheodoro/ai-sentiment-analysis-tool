@@ -9,9 +9,12 @@
   --card-foreground: 210 36% 12%;
   --surface: 176 48% 96%;
   --surface-strong: 27 100% 96%;
+  --secondary: 184 35% 90%;
+  --secondary-foreground: 190 53% 18%;
   --muted: 42 25% 91%;
   --muted-foreground: 211 17% 38%;
   --border: 190 18% 84%;
+  --input: 0 0% 100%;
   --primary: 177 78% 26%;
   --primary-foreground: 0 0% 100%;
   --accent: 15 85% 55%;
@@ -35,9 +38,12 @@
   --card-foreground: 42 30% 93%;
   --surface: 204 31% 15%;
   --surface-strong: 190 28% 18%;
+  --secondary: 200 25% 20%;
+  --secondary-foreground: 42 30% 93%;
   --muted: 212 22% 19%;
   --muted-foreground: 216 15% 70%;
   --border: 204 19% 24%;
+  --input: 211 28% 13%;
   --primary: 174 68% 48%;
   --primary-foreground: 212 36% 8%;
   --accent: 15 88% 61%;
@@ -84,6 +90,11 @@ body {
 
 ::selection {
   background: hsl(var(--primary) / 0.22);
+}
+
+a:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 3px;
 }
 
 button,

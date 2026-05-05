@@ -2,6 +2,7 @@
 
 import { ExternalLink, FileText, Home, Linkedin, Moon, Sun } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ const LINKEDIN_URL = "https://www.linkedin.com/in/theodoro-tajra/";
 export function SiteHeader() {
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem("theme");
@@ -47,14 +49,14 @@ export function SiteHeader() {
         </Link>
 
         <nav className="grid grid-cols-2 gap-2 min-[460px]:flex min-[460px]:flex-wrap min-[460px]:items-center">
-          <Button asChild variant="ghost" className="px-2 sm:px-3">
-            <Link href="/">
+          <Button asChild variant="ghost" className={`px-2 sm:px-3 ${pathname === "/" ? "bg-secondary text-secondary-foreground" : ""}`}>
+            <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>
               <Home className="h-4 w-4" />
               Dashboard
             </Link>
           </Button>
-          <Button asChild variant="ghost" className="px-2 sm:px-3">
-            <Link href="/docs">
+          <Button asChild variant="ghost" className={`px-2 sm:px-3 ${pathname === "/docs" ? "bg-secondary text-secondary-foreground" : ""}`}>
+            <Link href="/docs" aria-current={pathname === "/docs" ? "page" : undefined}>
               <FileText className="h-4 w-4" />
               How it works
             </Link>
@@ -68,8 +70,10 @@ export function SiteHeader() {
           </Button>
           <Button
             aria-label="Toggle dark mode"
+            aria-pressed={mounted ? isDark : undefined}
             className="h-10 w-10 px-0"
             onClick={toggleTheme}
+            title={mounted && isDark ? "Switch to light mode" : "Switch to dark mode"}
             type="button"
             variant="outline"
           >

@@ -51,6 +51,7 @@ export default function Home() {
   const [feedback, setFeedback] = useState("");
   const [history, setHistory] = useState<Analysis[]>([]);
   const [report, setReport] = useState<Report>(emptyReport);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [clearing, setClearing] = useState(false);
   const [error, setError] = useState("");
@@ -65,9 +66,11 @@ export default function Home() {
   }
 
   useEffect(() => {
-    refreshDashboard().catch((requestError) => {
-      setError(getRequestErrorMessage(requestError, "Unable to load the dashboard right now."));
-    });
+    refreshDashboard()
+      .catch((requestError) => {
+        setError(getRequestErrorMessage(requestError, "Unable to load the dashboard right now."));
+      })
+      .finally(() => setDashboardLoading(false));
   }, []);
 
   const chartData = useMemo(
@@ -218,32 +221,38 @@ export default function Home() {
                 <BarChart3 className="h-5 w-5 text-primary" />
                 Sentiment Distribution
               </CardTitle>
-              <p className="mt-1 text-sm text-muted-foreground">A quick view of how feedback is trending.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {dashboardLoading ? "Syncing saved analysis..." : "A quick view of how feedback is trending."}
+              </p>
             </div>
           </CardHeader>
           <CardContent className="p-5">
             <div className="h-60 sm:h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ left: -18, right: 8, top: 10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                  <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                  <Tooltip
-                    cursor={{ fill: "hsl(var(--primary) / 0.08)" }}
-                    contentStyle={{
-                      background: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                      color: "hsl(var(--foreground))",
-                    }}
-                  />
-                  <Bar dataKey="count" radius={[8, 8, 2, 2]}>
-                    {chartData.map((entry) => (
-                      <Cell key={entry.name} fill={entry.fill} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              {dashboardLoading ? (
+                <ChartSkeleton />
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData} margin={{ left: -18, right: 8, top: 10, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                    <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
+                    <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
+                    <Tooltip
+                      cursor={{ fill: "hsl(var(--primary) / 0.08)" }}
+                      contentStyle={{
+                        background: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "8px",
+                        color: "hsl(var(--foreground))",
+                      }}
+                    />
+                    <Bar dataKey="count" radius={[8, 8, 2, 2]}>
+                      {chartData.map((entry) => (
+                        <Cell key={entry.name} fill={entry.fill} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -252,7 +261,9 @@ export default function Home() {
           <CardHeader className="flex-row items-start justify-between gap-4 space-y-0 border-b border-border/70 bg-surface/45 p-5">
             <div>
               <CardTitle>Recent Feedback</CardTitle>
-              <p className="mt-1 text-sm text-muted-foreground">Newest saved analysis appears first.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {dashboardLoading ? "Preparing the latest saved feedback." : "Newest saved analysis appears first."}
+              </p>
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
@@ -288,7 +299,9 @@ export default function Home() {
               </TabsList>
               <TabsContent value="history">
                 <div className="max-h-80 space-y-3 overflow-auto pr-1">
-                  {history.length ? (
+                  {dashboardLoading ? (
+                    <HistorySkeleton />
+                  ) : history.length ? (
                     history.map((item, index) => (
                       <article
                         key={item.id ?? item.feedback}
@@ -354,6 +367,39 @@ function Metric({
     <div className={`rounded-md border border-border/75 bg-gradient-to-br ${tones[tone]} p-4 shadow-sm`}>
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
       <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
+    </div>
+  );
+}
+
+function ChartSkeleton() {
+  return (
+    <div className="flex h-full items-end gap-4 rounded-md border border-border/70 bg-surface/35 px-4 pb-6 pt-8" aria-label="Loading chart">
+      {[72, 48, 60].map((height, index) => (
+        <div key={height} className="flex flex-1 flex-col items-center justify-end gap-3">
+          <div
+            className="w-full max-w-20 animate-pulse rounded-t-md bg-gradient-to-t from-primary/28 to-accent/18"
+            style={{ height: `${height}%`, animationDelay: `${index * 120}ms` }}
+          />
+          <span className="h-2 w-16 rounded-full bg-muted" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function HistorySkeleton() {
+  return (
+    <div className="space-y-3" aria-label="Loading recent feedback">
+      {[0, 1, 2].map((item) => (
+        <div key={item} className="rounded-md border border-border/70 bg-card/70 p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <span className="h-5 w-20 animate-pulse rounded-full bg-primary/15" />
+            <span className="h-3 w-10 animate-pulse rounded-full bg-muted" />
+          </div>
+          <span className="block h-3 w-full animate-pulse rounded-full bg-muted" />
+          <span className="mt-2 block h-3 w-3/4 animate-pulse rounded-full bg-muted" />
+        </div>
+      ))}
     </div>
   );
 }
