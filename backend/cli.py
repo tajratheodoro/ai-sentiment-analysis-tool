@@ -1,16 +1,16 @@
-from analyzer import SentimentAnalyzer
-from database import DatabaseManager
-from models import Feedback
+from backend.core.analyzer import SentimentAnalyzer
+from backend.core.database import DatabaseManager
+from backend.core.models import Feedback
 
 
 SENTIMENTS = ("Positive", "Neutral", "Negative")
 
 
-def get_next_user_id():
+def get_next_user_id() -> int:
     return 101 + len(ia.historical_analysis)
 
 
-def submit_feedback():
+def submit_feedback() -> None:
     user_input = input("\nPlease, enter your feedback: ").strip()
 
     if not user_input:
@@ -25,17 +25,17 @@ def submit_feedback():
     print(f"Sentiment score: {new_client.score}")
 
 
-def view_performance_dashboard():
-    history_db = db.get_all_analysis()
+def view_performance_dashboard() -> None:
+    total = db.get_total_analysis()
 
     print("\nPerformance Dashboard")
 
-    if not history_db:
+    if not total:
         print("No feedback has been analyzed yet.")
         return
 
-    total = len(history_db)
-    positives = len([row for row in history_db if row[2].lower() == "positive"])
+    counts = db.get_sentiment_counts()
+    positives = counts.get("Positive", 0)
     percentage_positives = (positives / total) * 100
 
     print("FINAL FEEDBACK ANALYSIS REPORT:")
@@ -43,7 +43,7 @@ def view_performance_dashboard():
     print(f"Customer Satisfaction: {percentage_positives:.2f}% positive.")
 
 
-def get_sentiment_counts(history):
+def get_sentiment_counts(history: list[tuple[int, str, str]]) -> dict[str, int]:
     sentiment_counts = {sentiment: 0 for sentiment in SENTIMENTS}
 
     for row in history:
@@ -54,9 +54,8 @@ def get_sentiment_counts(history):
     return sentiment_counts
 
 
-def view_feedback_history():
+def view_feedback_history() -> None:
     history_db = db.get_all_analysis()
-    history_db.reverse()
 
     print("\nFeedback Analysis History")
 
@@ -72,7 +71,7 @@ def view_feedback_history():
         print(f"{row[2]} | {feedback_preview} ({row[2]})")
 
 
-def view_sentiment_bar_chart():
+def view_sentiment_bar_chart() -> None:
     history_db = db.get_all_analysis()
     sentiment_counts = get_sentiment_counts(history_db)
     max_count = max(sentiment_counts.values(), default=0)
@@ -89,10 +88,8 @@ def view_sentiment_bar_chart():
         print(f"{sentiment:<8} | {bar} {count}")
 
 
-def clear_history():
-    confirmation = input(
-        "\nType 'yes' to clear all feedback analysis history: "
-    ).strip().lower()
+def clear_history() -> None:
+    confirmation = input("\nType 'yes' to clear all feedback analysis history: ").strip().lower()
 
     if confirmation != "yes":
         print("Clear history cancelled.")
@@ -112,7 +109,7 @@ MENU_ACTIONS = {
 }
 
 
-def show_menu():
+def show_menu() -> None:
     print("\nCustomer Satisfaction Score System")
     print("1. Submit Feedback")
     print("2. View Performance Dashboard")
@@ -122,7 +119,7 @@ def show_menu():
     print("6. Exit")
 
 
-def run_cli():
+def run_cli() -> None:
     print("Welcome to the customer feedback analysis system!")
 
     while True:

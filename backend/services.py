@@ -1,6 +1,6 @@
-from analyzer import SentimentAnalyzer
-from database import DatabaseManager
-from models import Feedback
+from backend.core.analyzer import SentimentAnalyzer
+from backend.core.database import DatabaseManager
+from backend.core.models import Feedback
 
 
 SENTIMENTS = ("Positive", "Neutral", "Negative")
@@ -14,32 +14,30 @@ class SentimentService:
     def analyze_feedback(self, text: str) -> dict:
         feedback = Feedback(text, user_id=0)
         self.analyzer.analyse(feedback)
-        self.database.save_feedback(feedback.text, feedback.score)
-
-        latest_id = self.database.get_latest_id()
+        feedback_id = self.database.save_feedback(feedback.text, feedback.score)
         return {
-            "id": latest_id,
+            "id": feedback_id,
             "feedback": feedback.text,
             "sentiment": feedback.score,
         }
 
     def get_history(self) -> list[dict]:
         rows = self.database.get_all_analysis()
-        rows = sorted(rows, key=lambda row: row[0], reverse=True)
         return [
             {"id": row[0], "feedback": row[1], "sentiment": row[2]}
             for row in rows
         ]
 
     def get_report(self) -> dict:
-        rows = self.database.get_all_analysis()
-        total = len(rows)
+        total = self.database.get_total_analysis()
         counts = {sentiment: 0 for sentiment in SENTIMENTS}
-
-        for row in rows:
-            sentiment = row[2]
-            if sentiment in counts:
-                counts[sentiment] += 1
+        counts.update(
+            {
+                sentiment: count
+                for sentiment, count in self.database.get_sentiment_counts().items()
+                if sentiment in counts
+            }
+        )
 
         positive_percentage = (counts["Positive"] / total * 100) if total else 0
         return {

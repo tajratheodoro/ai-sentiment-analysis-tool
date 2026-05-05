@@ -1,32 +1,29 @@
 # AI Customer Sentiment Analyzer
 
-Aplicacao de analise de sentimentos para feedbacks de clientes. O Streamlit foi tratado como prototipo funcional e substituido por uma arquitetura profissional com frontend Next.js e backend FastAPI, preservando a logica Python existente.
+Aplicacao de analise de sentimentos para feedbacks de clientes com frontend Next.js, backend FastAPI e persistencia SQLite local.
 
 ## Arquitetura
 
-Antes:
-- `app.py`: prototipo Streamlit.
-- `main.py`: CLI.
-- `analyzer.py`: analise de sentimento com TextBlob.
-- `database.py`: persistencia SQLite.
-- `models.py`: modelo `Feedback`.
-
-Agora:
 - `frontend/`: aplicacao Next.js + TypeScript + Tailwind CSS + componentes estilo shadcn/ui + Recharts.
-- `backend/`: API FastAPI que reutiliza `SentimentAnalyzer`, `DatabaseManager` e `Feedback`.
-- `main.py`: CLI preservada.
-- `app.py`: legado, fora do fluxo principal.
+- `backend/`: API FastAPI, CLI e core Python de analise/persistencia.
+- `backend/core/`: analisador TextBlob, acesso SQLite e modelo `Feedback`.
+- `backend/cli.py`: CLI preservada para uso via terminal.
 
 Fluxo:
 
 ```text
-Frontend Next.js -> FastAPI -> SentimentAnalyzer -> DatabaseManager -> SQLite
+Frontend Next.js -> FastAPI -> backend/core -> SQLite
 ```
 
 ## Estrutura de Pastas
 
 ```text
 backend/
+  core/
+    analyzer.py
+    database.py
+    models.py
+  cli.py
   main.py
   schemas.py
   services.py
@@ -34,11 +31,6 @@ frontend/
   app/
   components/ui/
   lib/api.ts
-analyzer.py
-database.py
-models.py
-main.py
-app.py
 ```
 
 ## Backend FastAPI
@@ -76,6 +68,8 @@ Rodar frontend:
 npm run dev
 ```
 
+O comando acima tambem inicia a API FastAPI local automaticamente quando ela ainda nao estiver rodando.
+
 Acessar:
 
 ```text
@@ -89,6 +83,14 @@ NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
 ```
 
 Um exemplo esta em `frontend/.env.example`.
+
+## CLI
+
+Rodar a CLI preservada:
+
+```powershell
+python -m backend.cli
+```
 
 ## Endpoints
 
@@ -162,7 +164,3 @@ Recomendacoes futuras:
 - configurar HTTPS;
 - adicionar logs estruturados sem feedback completo;
 - adicionar testes automatizados de API e frontend.
-
-## Streamlit Legado
-
-`app.py` permanece no repositorio apenas como referencia do prototipo original. A interface principal agora e `frontend/` consumindo `backend/`.
