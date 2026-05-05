@@ -35,6 +35,11 @@ app.add_middleware(
 service = SentimentService()
 
 
+@app.get("/api/health", response_model=MessageResponse)
+def get_health() -> MessageResponse:
+    return MessageResponse(message="Sentiment API is running.")
+
+
 @app.post("/api/analyze", response_model=AnalysisResponse)
 def analyze_feedback(payload: AnalyzeRequest) -> AnalysisResponse:
     try:

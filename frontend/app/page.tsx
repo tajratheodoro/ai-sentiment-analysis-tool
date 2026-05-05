@@ -36,6 +36,10 @@ const emptyReport: Report = {
   positive_percentage: 0,
 };
 
+function getRequestErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error ? error.message : fallback;
+}
+
 const successAlertStyles: Record<Sentiment | "Default", string> = {
   Positive: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-200",
   Neutral: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-400/30 dark:bg-amber-500/15 dark:text-amber-200",
@@ -61,8 +65,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    refreshDashboard().catch(() => {
-      setError("Could not connect to the sentiment API.");
+    refreshDashboard().catch((requestError) => {
+      setError(getRequestErrorMessage(requestError, "Unable to load the dashboard right now."));
     });
   }, []);
 
@@ -99,8 +103,7 @@ export default function Home() {
         setError("Analysis was saved, but the dashboard could not refresh automatically.");
       }
     } catch (requestError) {
-      const message = requestError instanceof Error ? requestError.message : "Unable to analyze feedback right now.";
-      setError(message);
+      setError(getRequestErrorMessage(requestError, "Unable to analyze feedback right now."));
     } finally {
       setLoading(false);
     }
@@ -125,8 +128,8 @@ export default function Home() {
       setReport(emptyReport);
       setSuccess("History cleared successfully.");
       setSuccessSentiment(null);
-    } catch {
-      setError("Unable to clear history right now.");
+    } catch (requestError) {
+      setError(getRequestErrorMessage(requestError, "Unable to clear history right now."));
     } finally {
       setClearing(false);
     }

@@ -16,21 +16,35 @@ export type Report = {
 
 function getApiBaseUrls() {
   if (process.env.NEXT_PUBLIC_API_URL) {
-    return [process.env.NEXT_PUBLIC_API_URL];
+    return [process.env.NEXT_PUBLIC_API_URL, ""];
   }
 
   if (typeof window !== "undefined") {
-    return [""];
+    return ["", "http://127.0.0.1:8000"];
   }
 
   return ["http://127.0.0.1:8000"];
 }
 
+function getOfflineError() {
+  return new Error("Sentiment API is offline. Start the FastAPI backend on http://127.0.0.1:8000 and try again.");
+}
+
+async function readJson<T>(response: Response): Promise<T | null> {
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    return null;
+  }
+
+  return response.json() as Promise<T>;
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const hasBody = options?.body !== undefined;
   let lastNetworkError: unknown;
+  const baseUrls = getApiBaseUrls();
 
-  for (const baseUrl of getApiBaseUrls()) {
+  for (const [index, baseUrl] of baseUrls.entries()) {
     let response: Response;
     try {
       response = await fetch(`${baseUrl}${path}`, {
@@ -41,25 +55,30 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
         },
       });
     } catch {
-      lastNetworkError = new Error("Could not connect to the sentiment API.");
+      lastNetworkError = getOfflineError();
       continue;
     }
 
     if (!response.ok) {
-      let message = "The request could not be completed.";
-      try {
-        const data = await response.json();
-        if (typeof data.detail === "string") message = data.detail;
-      } catch {
-        message = "The API returned an unexpected response.";
+      const data = await readJson<{ detail?: string }>(response);
+      if (typeof data?.detail === "string") {
+        throw new Error(data.detail);
       }
-      throw new Error(message);
+
+      lastNetworkError = getOfflineError();
+      if (index < baseUrls.length - 1) continue;
+
+      throw lastNetworkError;
     }
 
-    return response.json() as Promise<T>;
+    const data = await readJson<T>(response);
+    if (data !== null) return data;
+
+    lastNetworkError = getOfflineError();
+    if (index < baseUrls.length - 1) continue;
   }
 
-  throw lastNetworkError;
+  throw lastNetworkError ?? getOfflineError();
 }
 
 export function analyzeFeedback(feedback: string) {
