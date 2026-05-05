@@ -30,14 +30,19 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/88 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/82 shadow-sm backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-3 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <Link className="flex min-w-0 items-center gap-3" href="/">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-primary to-accent text-sm font-bold text-primary-foreground shadow-md shadow-primary/20">
             CS
           </span>
-          <span className="truncate font-display text-base font-bold sm:text-lg">
-            Customer Satisfaction Score System
+          <span className="min-w-0">
+            <span className="block truncate font-display text-base font-bold tracking-tight sm:text-lg">
+              Customer Sentiment
+            </span>
+            <span className="block truncate text-xs font-medium text-muted-foreground">
+              AI feedback intelligence
+            </span>
           </span>
         </Link>
 
@@ -51,7 +56,7 @@ export function SiteHeader() {
           <Button asChild variant="ghost" className="px-2 sm:px-3">
             <Link href="/docs">
               <FileText className="h-4 w-4" />
-              How is works?
+              How it works
             </Link>
           </Button>
           <Button asChild variant="outline" className="px-2 sm:px-3">

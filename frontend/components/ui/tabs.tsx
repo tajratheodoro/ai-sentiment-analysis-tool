@@ -29,7 +29,7 @@ export function Tabs({
 }
 
 export function TabsList({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("inline-flex rounded-md bg-muted p-1", className)} {...props} />;
+  return <div className={cn("inline-flex rounded-md border border-border/70 bg-muted/75 p-1", className)} {...props} />;
 }
 
 export function TabsTrigger({
@@ -44,7 +44,7 @@ export function TabsTrigger({
       type="button"
       className={cn(
         "rounded-sm px-3 py-1.5 text-sm font-medium transition",
-        active ? "bg-card shadow-sm" : "text-muted-foreground hover:text-foreground",
+        active ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:bg-card/45 hover:text-foreground",
         className,
       )}
       onClick={() => context?.setValue(value)}

@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, BarChart3, CheckCircle2, Loader2, Trash2 } from "lucide-react";
+import { AlertCircle, BarChart3, CheckCircle2, Clock3, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { z } from "zod";
@@ -41,10 +41,10 @@ function getRequestErrorMessage(error: unknown, fallback: string) {
 }
 
 const successAlertStyles: Record<Sentiment | "Default", string> = {
-  Positive: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-200",
-  Neutral: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-400/30 dark:bg-amber-500/15 dark:text-amber-200",
-  Negative: "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-400/30 dark:bg-rose-500/15 dark:text-rose-200",
-  Default: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-200",
+  Positive: "border-success/25 bg-success/10 text-success",
+  Neutral: "border-warning/30 bg-warning/12 text-warning",
+  Negative: "border-destructive/25 bg-destructive/10 text-destructive",
+  Default: "border-success/25 bg-success/10 text-success",
 };
 
 export default function Home() {
@@ -72,9 +72,9 @@ export default function Home() {
 
   const chartData = useMemo(
     () => [
-      { name: "Positive", count: report.positive_count, fill: "#12847d" },
-      { name: "Neutral", count: report.neutral_count, fill: "#c08a1d" },
-      { name: "Negative", count: report.negative_count, fill: "#c94f5d" },
+      { name: "Positive", count: report.positive_count, fill: "hsl(var(--chart-positive))" },
+      { name: "Neutral", count: report.neutral_count, fill: "hsl(var(--chart-neutral))" },
+      { name: "Negative", count: report.negative_count, fill: "hsl(var(--chart-negative))" },
     ],
     [report],
   );
@@ -136,33 +136,52 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-8.75rem)] w-full max-w-7xl flex-col gap-4 px-3 py-4 sm:min-h-[calc(100vh-5.25rem)] sm:gap-5 sm:px-5 sm:py-5 lg:px-7">
-      <section className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
-        <div className="flex flex-col justify-between rounded-lg border border-border bg-card/80 p-4 shadow-sm backdrop-blur sm:p-5">
-          <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">Customer feedback dashboard</p>
-            <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-              Paste a customer comment to see if it sounds positive, neutral, or negative. Use the dashboard to follow satisfaction and recent feedback over time.
+    <main className="mx-auto flex min-h-[calc(100vh-8.75rem)] w-full max-w-7xl flex-col gap-5 px-3 py-4 sm:min-h-[calc(100vh-5.25rem)] sm:gap-6 sm:px-5 sm:py-6 lg:px-7">
+      <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="relative overflow-hidden rounded-lg border border-border/80 bg-card/88 p-5 shadow-[0_18px_70px_-45px_hsl(var(--primary)/0.65)] backdrop-blur sm:p-6">
+          <div className="absolute right-0 top-0 h-36 w-36 rounded-full bg-accent/12 blur-3xl" />
+          <div className="relative">
+            <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+              <Sparkles className="h-3.5 w-3.5" />
+              AI sentiment workspace
+            </p>
+            <h1 className="max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              Turn customer comments into a clear satisfaction signal.
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
+              Analyze each feedback, follow sentiment trends, and keep a readable history without leaving the dashboard.
             </p>
           </div>
-          <div className="mt-5 grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:grid-cols-4">
-            <Metric label="Total feedbacks analyzed" value={report.total_feedbacks.toString()} />
-            <Metric label="Customer Satisfaction" value={`${report.positive_percentage.toFixed(2)}%`} />
-            <Metric label="Positive" value={report.positive_count.toString()} />
-            <Metric label="Negative" value={report.negative_count.toString()} />
+          <div className="relative mt-6 grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
+            <Metric label="Feedbacks analyzed" value={report.total_feedbacks.toString()} tone="primary" />
+            <Metric label="Satisfaction" value={`${report.positive_percentage.toFixed(2)}%`} tone="accent" />
+            <Metric label="Positive" value={report.positive_count.toString()} tone="success" />
+            <Metric label="Negative" value={report.negative_count.toString()} tone="danger" />
           </div>
         </div>
 
-        <Card>
-          <CardHeader className="p-5 pb-3">
-            <CardTitle>Analyze Feedback</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="border-b border-border/70 bg-surface/55 p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <CardTitle>Analyze Feedback</CardTitle>
+                <p className="mt-1 text-sm text-muted-foreground">Paste one customer comment and get a sentiment label.</p>
+              </div>
+              <span className="rounded-md border border-primary/20 bg-primary/10 p-2 text-primary">
+                <CheckCircle2 className="h-4 w-4" />
+              </span>
+            </div>
           </CardHeader>
-          <CardContent className="p-5 pt-0">
+          <CardContent className="p-5">
             <form className="space-y-3" onSubmit={handleSubmit}>
+              <label className="text-sm font-semibold" htmlFor="feedback">
+                Customer feedback
+              </label>
               <Textarea
-                className="min-h-28 sm:min-h-32"
+                id="feedback"
+                className="min-h-32 sm:min-h-36"
                 maxLength={2000}
-                placeholder="Paste customer feedback here..."
+                placeholder="Example: The service was fast, but the checkout took too long..."
                 value={feedback}
                 onChange={(event) => setFeedback(event.target.value)}
                 onKeyDown={handleFeedbackKeyDown}
@@ -171,18 +190,19 @@ export default function Home() {
                 <span className="text-xs text-muted-foreground">{feedback.trim().length}/2000 characters</span>
                 <Button className="w-full min-[420px]:w-auto" disabled={loading} type="submit">
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-                  Analyze Feedback
+                  {loading ? "Analyzing..." : "Analyze Feedback"}
                 </Button>
               </div>
             </form>
             {success ? (
-              <Alert className={`mt-4 ${successAlertStyles[successSentiment ?? "Default"]}`}>
+              <Alert className={`mt-4 flex items-center gap-2 ${successAlertStyles[successSentiment ?? "Default"]}`}>
+                <CheckCircle2 className="h-4 w-4" />
                 {success}
               </Alert>
             ) : null}
             {error ? (
-              <Alert className="mt-4 border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-400/30 dark:bg-rose-500/15 dark:text-rose-200">
-                <AlertCircle className="mr-2 inline h-4 w-4" />
+              <Alert className="mt-4 flex items-center gap-2 border-destructive/25 bg-destructive/10 text-destructive">
+                <AlertCircle className="h-4 w-4" />
                 {error}
               </Alert>
             ) : null}
@@ -190,23 +210,34 @@ export default function Home() {
         </Card>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
-        <Card>
-          <CardHeader className="flex-col gap-2 space-y-0 p-5 pb-3 sm:flex-row sm:items-center sm:justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-primary" />
-              Sentiment Distribution
-            </CardTitle>
+      <section className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+        <Card className="overflow-hidden">
+          <CardHeader className="flex-col gap-2 space-y-0 border-b border-border/70 bg-surface/45 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-primary" />
+                Sentiment Distribution
+              </CardTitle>
+              <p className="mt-1 text-sm text-muted-foreground">A quick view of how feedback is trending.</p>
+            </div>
           </CardHeader>
-          <CardContent className="p-5 pt-0">
-            <div className="h-56 sm:h-60">
+          <CardContent className="p-5">
+            <div className="h-60 sm:h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ left: -18, right: 8, top: 10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="name" tickLine={false} axisLine={false} />
-                  <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
-                  <Tooltip cursor={{ fill: "rgba(18, 132, 125, 0.08)" }} />
-                  <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
+                  <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
+                  <Tooltip
+                    cursor={{ fill: "hsl(var(--primary) / 0.08)" }}
+                    contentStyle={{
+                      background: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                      color: "hsl(var(--foreground))",
+                    }}
+                  />
+                  <Bar dataKey="count" radius={[8, 8, 2, 2]}>
                     {chartData.map((entry) => (
                       <Cell key={entry.name} fill={entry.fill} />
                     ))}
@@ -217,14 +248,17 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0 p-5 pb-3">
-            <CardTitle>Recent Feedback</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="flex-row items-start justify-between gap-4 space-y-0 border-b border-border/70 bg-surface/45 p-5">
+            <div>
+              <CardTitle>Recent Feedback</CardTitle>
+              <p className="mt-1 text-sm text-muted-foreground">Newest saved analysis appears first.</p>
+            </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" disabled={!history.length}>
                   <Trash2 className="h-4 w-4" />
-                  Clear History
+                  Clear
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -246,37 +280,49 @@ export default function Home() {
               </DialogContent>
             </Dialog>
           </CardHeader>
-          <CardContent className="p-5 pt-0">
+          <CardContent className="p-5">
             <Tabs defaultValue="history">
               <TabsList>
                 <TabsTrigger value="history">History</TabsTrigger>
                 <TabsTrigger value="metrics">Metrics</TabsTrigger>
               </TabsList>
               <TabsContent value="history">
-                <div className="max-h-72 space-y-3 overflow-auto pr-1">
+                <div className="max-h-80 space-y-3 overflow-auto pr-1">
                   {history.length ? (
                     history.map((item, index) => (
-                      <article key={item.id ?? item.feedback} className="rounded-md border border-border bg-card p-4">
+                      <article
+                        key={item.id ?? item.feedback}
+                        className="rounded-md border border-border/75 bg-card/80 p-4 shadow-sm transition duration-200 hover:border-primary/30 hover:bg-surface/45"
+                      >
                         <div className="mb-2 flex items-center justify-between gap-3">
                           <Badge sentiment={item.sentiment}>{item.sentiment}</Badge>
-                          <span className="text-xs text-muted-foreground">#{history.length - index}</span>
+                          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <Clock3 className="h-3.5 w-3.5" />
+                            #{history.length - index}
+                          </span>
                         </div>
                         <p className="whitespace-pre-wrap break-words text-sm leading-6">{item.feedback}</p>
                       </article>
                     ))
                   ) : (
-                    <p className="rounded-md border border-dashed border-border p-6 text-sm text-muted-foreground">
-                      No feedback history yet.
-                    </p>
+                    <div className="rounded-lg border border-dashed border-primary/30 bg-surface/50 p-6 text-center">
+                      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                        <Sparkles className="h-5 w-5" />
+                      </div>
+                      <p className="mt-3 text-sm font-semibold">No feedback history yet</p>
+                      <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                        Analyze your first customer comment to populate this list and update the chart.
+                      </p>
+                    </div>
                   )}
                 </div>
               </TabsContent>
               <TabsContent value="metrics">
                 <div className="grid gap-3 min-[420px]:grid-cols-2">
-                  <Metric label="Neutral count" value={report.neutral_count.toString()} />
-                  <Metric label="Positive percentage" value={`${report.positive_percentage.toFixed(2)}%`} />
-                  <Metric label="Positive count" value={report.positive_count.toString()} />
-                  <Metric label="Negative count" value={report.negative_count.toString()} />
+                  <Metric label="Neutral count" value={report.neutral_count.toString()} tone="warning" />
+                  <Metric label="Positive percentage" value={`${report.positive_percentage.toFixed(2)}%`} tone="accent" />
+                  <Metric label="Positive count" value={report.positive_count.toString()} tone="success" />
+                  <Metric label="Negative count" value={report.negative_count.toString()} tone="danger" />
                 </div>
               </TabsContent>
             </Tabs>
@@ -287,11 +333,27 @@ export default function Home() {
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({
+  label,
+  value,
+  tone = "primary",
+}: {
+  label: string;
+  value: string;
+  tone?: "primary" | "accent" | "success" | "warning" | "danger";
+}) {
+  const tones = {
+    primary: "from-primary/16 to-primary/5 text-primary",
+    accent: "from-accent/18 to-accent/5 text-accent",
+    success: "from-success/16 to-success/5 text-success",
+    warning: "from-warning/16 to-warning/5 text-warning",
+    danger: "from-destructive/16 to-destructive/5 text-destructive",
+  };
+
   return (
-    <div className="rounded-md border border-border bg-card/75 p-4">
+    <div className={`rounded-md border border-border/75 bg-gradient-to-br ${tones[tone]} p-4 shadow-sm`}>
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
-      <p className="mt-2 text-2xl font-bold">{value}</p>
+      <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
     </div>
   );
 }
