@@ -1,11 +1,13 @@
 "use client";
 
 import { ExternalLink, FileText, Home, Linkedin, Moon, Sun } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/theodoro-tajra/";
 
@@ -13,6 +15,7 @@ export function SiteHeader() {
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const { language, toggleLanguage, t } = useI18n();
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem("theme");
@@ -35,15 +38,15 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/82 shadow-sm backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-3 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <Link className="flex min-w-0 items-center gap-3" href="/">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-primary to-accent text-sm font-bold text-primary-foreground shadow-md shadow-primary/20">
-            CS
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md border border-primary/20 bg-card shadow-md shadow-primary/20">
+            <Image src="/images/icone.webp" alt="" width={40} height={40} className="h-full w-full object-cover" priority />
           </span>
           <span className="min-w-0">
             <span className="block truncate font-display text-base font-bold tracking-tight sm:text-lg">
-              Customer Sentiment
+              {t.nav.brand}
             </span>
             <span className="block truncate text-xs font-medium text-muted-foreground">
-              AI feedback intelligence
+              {t.nav.tagline}
             </span>
           </span>
         </Link>
@@ -52,28 +55,40 @@ export function SiteHeader() {
           <Button asChild variant="ghost" className={`px-2 sm:px-3 ${pathname === "/" ? "bg-secondary text-secondary-foreground" : ""}`}>
             <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>
               <Home className="h-4 w-4" />
-              Dashboard
+              {t.nav.dashboard}
             </Link>
           </Button>
           <Button asChild variant="ghost" className={`px-2 sm:px-3 ${pathname === "/docs" ? "bg-secondary text-secondary-foreground" : ""}`}>
             <Link href="/docs" aria-current={pathname === "/docs" ? "page" : undefined}>
               <FileText className="h-4 w-4" />
-              How it works
+              {t.nav.docs}
             </Link>
           </Button>
           <Button asChild variant="outline" className="px-2 sm:px-3">
             <a href={LINKEDIN_URL} rel="noreferrer" target="_blank">
               <Linkedin className="h-4 w-4" />
-              LinkedIn
+              {t.nav.linkedin}
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </Button>
           <Button
-            aria-label="Toggle dark mode"
+            aria-label="Alternar idioma / Toggle language"
+            aria-pressed={language === "ptbr"}
+            className="px-3 text-xs uppercase tracking-wide"
+            onClick={toggleLanguage}
+            type="button"
+            variant="outline"
+          >
+            <span className={language === "ptbr" ? "text-primary" : "text-muted-foreground"}>ptbr</span>
+            <span className="text-muted-foreground">/</span>
+            <span className={language === "eng" ? "text-primary" : "text-muted-foreground"}>eng</span>
+          </Button>
+          <Button
+            aria-label={t.nav.toggleTheme}
             aria-pressed={mounted ? isDark : undefined}
             className="h-10 w-10 px-0"
             onClick={toggleTheme}
-            title={mounted && isDark ? "Switch to light mode" : "Switch to dark mode"}
+            title={mounted && isDark ? t.nav.light : t.nav.dark}
             type="button"
             variant="outline"
           >
