@@ -16,6 +16,7 @@ frontend/.env.local
 .DS_Store
 DESIGN.md
 PRODUCT.md
+images/
 
 feedback_analysis.db
 node_modules/
