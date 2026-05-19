@@ -6,7 +6,7 @@ export function Alert({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
   return (
     <div
       role="alert"
-      className={cn("rounded-md border border-border bg-card/90 px-4 py-3 text-sm shadow-sm", className)}
+      className={cn("rounded-xl border border-border bg-card/90 px-4 py-3 text-sm shadow-none", className)}
       {...props}
     />
   );

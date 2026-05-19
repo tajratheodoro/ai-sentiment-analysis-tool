@@ -3,60 +3,129 @@
 @tailwind utilities;
 
 :root {
-  --background: 40 43% 97%;
-  --foreground: 210 36% 12%;
-  --card: 0 0% 100%;
-  --card-foreground: 210 36% 12%;
-  --surface: 176 48% 96%;
-  --surface-strong: 27 100% 96%;
-  --secondary: 184 35% 90%;
-  --secondary-foreground: 190 53% 18%;
-  --muted: 42 25% 91%;
-  --muted-foreground: 211 17% 38%;
-  --border: 190 18% 84%;
-  --input: 0 0% 100%;
-  --primary: 177 78% 26%;
-  --primary-foreground: 0 0% 100%;
-  --accent: 15 85% 55%;
-  --accent-foreground: 0 0% 100%;
-  --success: 160 72% 32%;
-  --warning: 38 90% 46%;
-  --info: 205 73% 42%;
-  --destructive: 353 72% 46%;
-  --destructive-foreground: 0 0% 100%;
-  --ring: 177 78% 30%;
-  --chart-positive: 166 72% 34%;
-  --chart-neutral: 38 90% 50%;
-  --chart-negative: 350 74% 56%;
-  --radius: 0.5rem;
+  --color-midnight-slate: #161e29;
+  --color-ghost-white: #fefcfb;
+  --color-off-white-canvas: #eae5dd;
+  --color-carbon-text: #1e1d1d;
+  --color-faded-steel: #b8b9bc;
+  --color-light-steel: #d0d0d1;
+  --color-cosmic-gradient: #e9b3f2;
+  --color-deep-space-black: #000000;
+  --gradient-cosmic-gradient: linear-gradient(180deg, rgb(233, 179, 242) 22%, rgb(152, 104, 204) 74%, rgb(95, 77, 189) 100%);
+
+  --font-sans-serif: "Test Untitled Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-test-untitled-sans: "Test Untitled Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-test-untitled-sans-regular: "Test Untitled Sans Regular", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --text-caption: 12px;
+  --leading-caption: 1.2;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.4;
+  --text-body: 16px;
+  --leading-body: 1.35;
+  --tracking-body: -0.32px;
+  --text-subheading: 18px;
+  --leading-subheading: 1.2;
+  --tracking-subheading: -0.36px;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.12;
+  --tracking-heading-sm: -0.48px;
+  --text-heading: 28px;
+  --leading-heading: 1.08;
+  --tracking-heading: -0.56px;
+  --text-heading-lg: 48px;
+  --leading-heading-lg: 1;
+  --tracking-heading-lg: -1.92px;
+  --text-display: 64px;
+  --leading-display: 0.9;
+  --tracking-display: -3.84px;
+
+  --spacing-4: 4px;
+  --spacing-5: 5px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-12: 12px;
+  --spacing-14: 14px;
+  --spacing-15: 15px;
+  --spacing-18: 18px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-30: 30px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-80: 80px;
+  --spacing-200: 200px;
+
+  --radius: 12px;
+  --radius-md: 5px;
+  --radius-xl: 12px;
+  --radius-2xl: 19px;
+  --radius-3xl: 30px;
+  --radius-full: 100px;
+  --radius-full-2: 117px;
+  --radius-full-3: 180px;
+  --radius-full-4: 1000px;
+  --radius-full-5: 3000px;
+  --radius-cards: 12px;
+  --radius-images: 12px;
+  --radius-buttons: 100px;
+  --radius-formfields: 100px;
+
+  --background: 35 22% 92%;
+  --foreground: 0 2% 12%;
+  --card: 24 100% 99%;
+  --card-foreground: 0 2% 12%;
+  --surface: 36 22% 88%;
+  --surface-strong: 34 19% 84%;
+  --secondary: 34 23% 91%;
+  --secondary-foreground: 0 2% 12%;
+  --muted: 36 14% 82%;
+  --muted-foreground: 220 3% 43%;
+  --border: 220 3% 79%;
+  --input: 24 100% 99%;
+  --primary: 0 2% 12%;
+  --primary-foreground: 24 100% 99%;
+  --accent: 289 74% 82%;
+  --accent-foreground: 214 29% 13%;
+  --success: 156 43% 37%;
+  --warning: 38 70% 44%;
+  --info: 247 40% 52%;
+  --destructive: 355 61% 48%;
+  --destructive-foreground: 24 100% 99%;
+  --ring: 289 74% 70%;
+  --chart-positive: 156 43% 42%;
+  --chart-neutral: 38 70% 52%;
+  --chart-negative: 355 61% 56%;
 }
 
 .dark {
-  --background: 212 36% 8%;
-  --foreground: 42 30% 93%;
-  --card: 212 29% 12%;
-  --card-foreground: 42 30% 93%;
-  --surface: 204 31% 15%;
-  --surface-strong: 190 28% 18%;
-  --secondary: 200 25% 20%;
-  --secondary-foreground: 42 30% 93%;
-  --muted: 212 22% 19%;
-  --muted-foreground: 216 15% 70%;
-  --border: 204 19% 24%;
-  --input: 211 28% 13%;
-  --primary: 174 68% 48%;
-  --primary-foreground: 212 36% 8%;
-  --accent: 15 88% 61%;
-  --accent-foreground: 212 36% 8%;
-  --success: 158 64% 48%;
-  --warning: 38 92% 58%;
-  --info: 198 78% 62%;
-  --destructive: 353 72% 59%;
-  --destructive-foreground: 0 0% 100%;
-  --ring: 174 68% 48%;
-  --chart-positive: 166 66% 47%;
-  --chart-neutral: 38 92% 58%;
-  --chart-negative: 350 78% 64%;
+  --background: 214 29% 13%;
+  --foreground: 24 100% 99%;
+  --card: 214 29% 13%;
+  --card-foreground: 24 100% 99%;
+  --surface: 218 29% 9%;
+  --surface-strong: 214 30% 7%;
+  --secondary: 36 19% 89%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 217 17% 20%;
+  --muted-foreground: 230 3% 73%;
+  --border: 220 10% 23%;
+  --input: 214 29% 13%;
+  --primary: 24 100% 99%;
+  --primary-foreground: 0 0% 0%;
+  --accent: 289 74% 82%;
+  --accent-foreground: 214 29% 13%;
+  --success: 156 51% 56%;
+  --warning: 38 83% 61%;
+  --info: 247 52% 69%;
+  --destructive: 355 76% 68%;
+  --destructive-foreground: 214 29% 13%;
+  --ring: 289 74% 82%;
+  --chart-positive: 156 51% 56%;
+  --chart-neutral: 38 83% 61%;
+  --chart-negative: 355 76% 68%;
 }
 
 * {
@@ -71,35 +140,58 @@ html {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, hsl(var(--primary) / 0.18), transparent 34rem),
-    radial-gradient(circle at 84% 12%, hsl(var(--accent) / 0.16), transparent 28rem),
-    linear-gradient(135deg, hsl(var(--surface) / 0.82), transparent 42%),
-    hsl(var(--background));
+    radial-gradient(circle at 18% 8%, rgb(233 179 242 / 0.18), transparent 26rem),
+    radial-gradient(circle at 88% 12%, rgb(95 77 189 / 0.12), transparent 30rem),
+    linear-gradient(180deg, hsl(var(--surface) / 0.92), hsl(var(--background)) 34rem);
   color: hsl(var(--foreground));
-  font-family: Aptos, "Segoe UI", sans-serif;
+  font-family: var(--font-test-untitled-sans);
+  letter-spacing: var(--tracking-body);
   text-rendering: optimizeLegibility;
 }
 
 .dark body {
   background:
-    radial-gradient(circle at top left, hsl(var(--primary) / 0.16), transparent 33rem),
-    radial-gradient(circle at 82% 10%, hsl(var(--accent) / 0.13), transparent 29rem),
-    linear-gradient(145deg, hsl(var(--surface) / 0.5), transparent 44%),
-    hsl(var(--background));
+    radial-gradient(circle at 22% 0%, rgb(233 179 242 / 0.16), transparent 25rem),
+    radial-gradient(circle at 88% 14%, rgb(95 77 189 / 0.20), transparent 32rem),
+    linear-gradient(180deg, hsl(var(--surface-strong)), hsl(var(--background)) 32rem);
+}
+
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(hsl(var(--foreground) / 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--foreground) / 0.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(to bottom, black, transparent 76%);
 }
 
 ::selection {
-  background: hsl(var(--primary) / 0.22);
+  background: hsl(var(--accent) / 0.32);
 }
 
-a:focus-visible {
+a:focus-visible,
+button:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 3px;
 }
 
 button,
-textarea {
+textarea,
+input {
   font: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 400;
+  letter-spacing: -0.05em;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -19,6 +19,8 @@ PRODUCT.md
 images/
 
 feedback_analysis.db
+*.exe
+*.msi
 node_modules/
 frontend/node_modules/
 frontend/.next/

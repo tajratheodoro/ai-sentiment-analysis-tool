@@ -32,7 +32,7 @@ export function TabsList({ className, ...props }: React.HTMLAttributes<HTMLDivEl
   return (
     <div
       role="tablist"
-      className={cn("inline-flex rounded-md border border-border/70 bg-muted/75 p-1", className)}
+      className={cn("inline-flex rounded-full border border-border/70 bg-muted/75 p-1", className)}
       {...props}
     />
   );
@@ -83,8 +83,8 @@ export function TabsTrigger({
       aria-selected={active}
       tabIndex={active ? 0 : -1}
       className={cn(
-        "rounded-sm px-3 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        active ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:bg-card/45 hover:text-foreground",
+        "rounded-full px-3 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        active ? "bg-card text-foreground" : "text-muted-foreground hover:bg-card/45 hover:text-foreground",
         className,
       )}
       onClick={(event) => {

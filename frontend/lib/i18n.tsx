@@ -10,7 +10,7 @@ const dictionaries = {
   eng: {
     nav: {
       dashboard: "Dashboard",
-      docs: "How it works",
+      docs: "How it works?",
       linkedin: "LinkedIn",
       toggleTheme: "Toggle dark mode",
       light: "Switch to light mode",
@@ -72,7 +72,7 @@ const dictionaries = {
     },
     docs: {
       back: "Back to dashboard",
-      eyebrow: "How it works",
+      eyebrow: "How it works?",
       title: "A clear guide for reading customer feedback",
       intro: "This app analyzes feedback locally in your browser. You can paste messages, upload CSV files, restore a previous JSON export, and download the results for presentations.",
       steps: [
@@ -96,7 +96,7 @@ const dictionaries = {
   ptbr: {
     nav: {
       dashboard: "Dashboard",
-      docs: "Como funciona",
+      docs: "Como funciona?",
       linkedin: "LinkedIn",
       toggleTheme: "Alternar modo escuro",
       light: "Mudar para modo claro",
@@ -158,7 +158,7 @@ const dictionaries = {
     },
     docs: {
       back: "Voltar ao dashboard",
-      eyebrow: "Como funciona",
+      eyebrow: "Como funciona?",
       title: "Um guia claro para ler feedbacks de clientes",
       intro: "Este app analisa feedbacks localmente no navegador. Você pode colar mensagens, enviar CSV, restaurar uma exportação JSON anterior e baixar os resultados para apresentações.",
       steps: [

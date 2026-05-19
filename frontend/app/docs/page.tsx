@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, BarChart3, CheckCircle2, ClipboardList, FileArchive, MessageSquareText, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, BarChart3, CheckCircle2, ClipboardList, FileArchive, MessageSquareText, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -14,52 +14,52 @@ export default function DocsPage() {
   const icons = [MessageSquareText, CheckCircle2, BarChart3];
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-8.75rem)] w-full max-w-5xl flex-col gap-5 px-3 py-5 sm:min-h-[calc(100vh-5.25rem)] sm:gap-6 sm:px-6 sm:py-6 lg:px-8">
-      <section className="relative overflow-hidden rounded-lg border border-border/80 bg-card/88 p-5 shadow-[0_18px_70px_-45px_hsl(var(--primary)/0.65)] backdrop-blur sm:p-7">
-        <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-accent/12 blur-3xl" />
-        <div className="relative">
-          <div className="mb-10 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <Button asChild variant="ghost" className="px-0">
+    <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-3 py-5 sm:px-6 sm:py-8 lg:px-8">
+      <section className="grid gap-5 lg:grid-cols-[0.84fr_1.16fr]">
+        <Card className="overflow-hidden">
+          <CardHeader className="border-b border-border bg-card p-5 sm:p-6">
+            <Button asChild variant="ghost" className="mb-10 w-fit px-0">
               <Link href="/">
                 <ArrowLeft className="h-4 w-4" />
                 {t.docs.back}
               </Link>
             </Button>
-            <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-              <Sparkles className="h-3.5 w-3.5" />
+            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary/70 px-3 py-1 text-xs font-medium uppercase tracking-wide text-secondary-foreground">
+              <ClipboardList className="h-4 w-4" />
               {t.docs.eyebrow}
             </p>
-          </div>
-          <h1 className="font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">{t.docs.title}</h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground">{t.docs.intro}</p>
-        </div>
-      </section>
+            <h1 className="max-w-3xl font-display text-heading font-normal tracking-[var(--tracking-heading)] text-foreground sm:text-heading-lg">
+              {t.docs.title}
+            </h1>
+            <p className="max-w-3xl text-body-sm leading-6 text-muted-foreground sm:text-body">{t.docs.intro}</p>
+          </CardHeader>
+        </Card>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        {t.docs.steps.map(([title, text], index) => {
-          const Icon = icons[index] ?? MessageSquareText;
-          return (
-            <Card key={title} className="group overflow-hidden">
-              <CardHeader>
-                <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary transition duration-200 group-hover:bg-primary group-hover:text-primary-foreground">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <CardTitle>{title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm leading-6 text-muted-foreground">{text}</p>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </section>
-
-      <section className="grid gap-4 lg:grid-cols-[0.92fr_1.08fr]">
         <Card className="overflow-hidden">
-          <CardHeader className="border-b border-border/70 bg-surface/45">
+          <CardContent className="grid gap-4 p-5 sm:p-6">
+            <div className="rounded-xl border border-border bg-card p-4">
+              <div className="flex gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-cosmic-gradient)] text-ghost-white">
+                  <ShieldCheck className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-lg font-normal tracking-[-0.04em] text-foreground">{t.docs.lgpdTitle}</p>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{t.docs.lgpdText}</p>
+                </div>
+              </div>
+            </div>
+            <GuideRow icon={<FileArchive className="h-5 w-5" />} title={t.dashboard.download} text={t.docs.recommendation} />
+            <GuideRow icon={<ClipboardList className="h-5 w-5" />} title={t.docs.eyebrow} text={t.docs.browserStorage} />
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="grid gap-5 lg:grid-cols-[0.76fr_1.24fr]">
+        <Card className="overflow-hidden">
+          <CardHeader className="border-b border-border bg-card p-5">
             <CardTitle>{t.docs.labelsTitle}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 p-5">
+          <CardContent className="space-y-3 p-5">
             <Meaning sentiment="Positive" label={t.dashboard.positive} text={t.docs.positiveText} />
             <Meaning sentiment="Neutral" label={t.dashboard.neutral} text={t.docs.neutralText} />
             <Meaning sentiment="Negative" label={t.dashboard.negative} text={t.docs.negativeText} />
@@ -67,17 +67,27 @@ export default function DocsPage() {
         </Card>
 
         <Card className="overflow-hidden">
-          <CardHeader className="border-b border-border/70 bg-surface/45">
-            <CardTitle className="flex items-center gap-2">
-              <ClipboardList className="h-5 w-5 text-primary" />
-              {t.docs.guideTitle}
-            </CardTitle>
+          <CardHeader className="border-b border-border bg-card p-5">
+            <CardTitle>{t.docs.guideTitle}</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-3 p-5 text-sm leading-6 text-muted-foreground">
-            <DashboardGuide icon={<ShieldCheck className="h-5 w-5" />} title={t.docs.lgpdTitle} text={t.docs.lgpdText} />
-            <DashboardGuide icon={<FileArchive className="h-5 w-5" />} title={t.dashboard.download} text={t.docs.recommendation} />
-            <DashboardGuide icon={<BarChart3 className="h-5 w-5" />} title={t.docs.csvTitle} text={t.docs.csvText} />
-            <DashboardGuide icon={<ClipboardList className="h-5 w-5" />} title={t.docs.eyebrow} text={t.docs.browserStorage} />
+          <CardContent className="p-5">
+            <div className="grid gap-3 md:grid-cols-3">
+              {t.docs.steps.map(([title, text], index) => {
+                const Icon = icons[index] ?? MessageSquareText;
+                return (
+                  <div key={title} className="rounded-xl border border-border bg-card p-4">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-accent">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <p className="mt-4 font-medium text-foreground">{title}</p>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{text}</p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-4 rounded-xl border border-border bg-surface/45 p-4">
+              <GuideRow icon={<BarChart3 className="h-5 w-5" />} title={t.docs.csvTitle} text={t.docs.csvText} />
+            </div>
           </CardContent>
         </Card>
       </section>
@@ -87,21 +97,23 @@ export default function DocsPage() {
 
 function Meaning({ sentiment, label, text }: { sentiment: "Positive" | "Neutral" | "Negative"; label: string; text: string }) {
   return (
-    <div className="rounded-md border border-border/75 bg-card/80 p-4 shadow-sm transition duration-200 hover:border-primary/30 hover:bg-surface/45">
+    <div className="rounded-xl border border-border bg-card p-4 transition duration-200 hover:border-accent/40 hover:bg-surface/45">
       <Badge sentiment={sentiment}>{label}</Badge>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p>
     </div>
   );
 }
 
-function DashboardGuide({ icon, title, text }: { icon: ReactNode; title: string; text: string }) {
+function GuideRow({ icon, title, text }: { icon: ReactNode; title: string; text: string }) {
   return (
-    <div className="rounded-md border border-border/75 bg-card/80 p-4 shadow-sm transition duration-200 hover:border-primary/30 hover:bg-surface/45">
-      <div className="flex items-center gap-2 font-semibold text-foreground">
-        <span className="text-primary">{icon}</span>
-        {title}
+    <div className="rounded-xl border border-border bg-surface/45 p-4">
+      <div className="flex gap-3">
+        <span className="mt-0.5 text-accent">{icon}</span>
+        <div>
+          <p className="font-medium text-foreground">{title}</p>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">{text}</p>
+        </div>
       </div>
-      <p className="mt-2">{text}</p>
     </div>
   );
 }

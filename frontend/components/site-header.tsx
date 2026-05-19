@@ -19,8 +19,7 @@ export function SiteHeader() {
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const shouldUseDark = savedTheme ? savedTheme === "dark" : prefersDark;
+    const shouldUseDark = savedTheme ? savedTheme === "dark" : true;
 
     document.documentElement.classList.toggle("dark", shouldUseDark);
     setIsDark(shouldUseDark);
@@ -35,36 +34,37 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/82 shadow-sm backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-3 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/88 backdrop-blur-xl">
+      <div className="mx-auto grid w-full max-w-7xl gap-3 px-3 py-3 sm:px-6 lg:h-16 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-8">
         <Link className="flex min-w-0 items-center gap-3" href="/">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md border border-primary/20 bg-card shadow-md shadow-primary/20">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-card">
             <Image src="/images/icone.webp" alt="" width={40} height={40} className="h-full w-full object-cover" priority />
           </span>
           <span className="min-w-0">
-            <span className="block truncate font-display text-base font-bold tracking-tight sm:text-lg">
+            <span className="block truncate font-display text-sm font-normal tracking-[-0.03em] text-foreground sm:text-base">
               {t.nav.brand}
             </span>
-            <span className="block truncate text-xs font-medium text-muted-foreground">
-              {t.nav.tagline}
-            </span>
+            <span className="block truncate text-xs font-medium text-muted-foreground">{t.nav.tagline}</span>
           </span>
         </Link>
 
-        <nav className="grid grid-cols-2 gap-2 min-[460px]:flex min-[460px]:flex-wrap min-[460px]:items-center">
-          <Button asChild variant="ghost" className={`px-2 sm:px-3 ${pathname === "/" ? "bg-secondary text-secondary-foreground" : ""}`}>
+        <nav className="grid grid-cols-2 gap-2 min-[520px]:flex min-[520px]:items-center lg:justify-center">
+          <Button asChild variant={pathname === "/" ? "default" : "ghost"} className="px-3">
             <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>
               <Home className="h-4 w-4" />
               {t.nav.dashboard}
             </Link>
           </Button>
-          <Button asChild variant="ghost" className={`px-2 sm:px-3 ${pathname === "/docs" ? "bg-secondary text-secondary-foreground" : ""}`}>
+          <Button asChild variant={pathname === "/docs" ? "default" : "ghost"} className="px-3">
             <Link href="/docs" aria-current={pathname === "/docs" ? "page" : undefined}>
               <FileText className="h-4 w-4" />
               {t.nav.docs}
             </Link>
           </Button>
-          <Button asChild variant="outline" className="px-2 sm:px-3">
+        </nav>
+
+        <div className="grid grid-cols-3 gap-2 min-[520px]:flex min-[520px]:items-center lg:justify-end">
+          <Button asChild variant="outline" className="px-3">
             <a href={LINKEDIN_URL} rel="noreferrer" target="_blank">
               <Linkedin className="h-4 w-4" />
               {t.nav.linkedin}
@@ -79,9 +79,9 @@ export function SiteHeader() {
             type="button"
             variant="outline"
           >
-            <span className={language === "ptbr" ? "text-primary" : "text-muted-foreground"}>ptbr</span>
+            <span className={language === "ptbr" ? "text-accent" : "text-muted-foreground"}>ptbr</span>
             <span className="text-muted-foreground">/</span>
-            <span className={language === "eng" ? "text-primary" : "text-muted-foreground"}>eng</span>
+            <span className={language === "eng" ? "text-accent" : "text-muted-foreground"}>eng</span>
           </Button>
           <Button
             aria-label={t.nav.toggleTheme}
@@ -94,7 +94,7 @@ export function SiteHeader() {
           >
             {mounted && isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
-        </nav>
+        </div>
       </div>
     </header>
   );

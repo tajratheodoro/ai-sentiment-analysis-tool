@@ -34,7 +34,7 @@ export type LocalReport = {
 type ModelStatus = "loading" | "ready" | "fallback";
 
 const MAX_ITEMS = 120;
-const MODEL_ID = "Xenova/mDeBERTa-v3-base-mnli-xnli";
+const MODEL_ID = "Xenova/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7";
 
 const sentimentLabels = ["positive customer feedback", "neutral customer feedback", "negative customer feedback"];
 const categoryLabels: Record<CategoryKey, string> = {
@@ -47,6 +47,19 @@ const categoryLabels: Record<CategoryKey, string> = {
 };
 
 let classifierPromise: Promise<unknown> | null = null;
+
+function createAnalysisId() {
+  if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
+  }
+
+  const randomPart =
+    globalThis.crypto && typeof globalThis.crypto.getRandomValues === "function"
+      ? Array.from(globalThis.crypto.getRandomValues(new Uint32Array(2)), (value) => value.toString(36)).join("")
+      : Math.random().toString(36).slice(2);
+
+  return `analysis-${Date.now().toString(36)}-${randomPart}`;
+}
 
 export function normalizeFeedbackInput(input: string) {
   return input
@@ -107,7 +120,8 @@ export async function analyzeFeedbackBatch(
     onStatus("loading");
     classifier = await getClassifier();
     onStatus("ready");
-  } catch {
+  } catch (error) {
+    console.warn("Local AI model unavailable; using offline fallback.", error);
     onStatus("fallback");
   }
 
@@ -115,7 +129,7 @@ export async function analyzeFeedbackBatch(
   for (const feedback of uniqueFeedbacks) {
     const analyzed = classifier ? await analyzeWithModel(classifier, feedback) : analyzeWithFallback(feedback);
     items.push({
-      id: crypto.randomUUID(),
+      id: createAnalysisId(),
       feedback,
       ...analyzed,
     });
@@ -168,7 +182,7 @@ export function validateImportedAnalysis(value: unknown): LocalAnalysis {
     items: (value as LocalAnalysis).items
       .filter((item) => typeof item.feedback === "string")
       .map((item) => ({
-        id: typeof item.id === "string" ? item.id : crypto.randomUUID(),
+        id: typeof item.id === "string" ? item.id : createAnalysisId(),
         feedback: item.feedback,
         sentiment: isSentiment(item.sentiment) ? item.sentiment : "Neutral",
         category: isCategory(item.category) ? item.category : "other",
@@ -179,11 +193,16 @@ export function validateImportedAnalysis(value: unknown): LocalAnalysis {
 
 async function getClassifier() {
   if (!classifierPromise) {
-    classifierPromise = import("@xenova/transformers").then(async ({ env, pipeline }) => {
-      env.allowLocalModels = false;
-      env.useBrowserCache = true;
-      return pipeline("zero-shot-classification", MODEL_ID, { quantized: true });
-    });
+    classifierPromise = import("@xenova/transformers")
+      .then(async ({ env, pipeline }) => {
+        env.allowLocalModels = false;
+        env.useBrowserCache = true;
+        return pipeline("zero-shot-classification", MODEL_ID, { quantized: true });
+      })
+      .catch((error) => {
+        classifierPromise = null;
+        throw error;
+      });
   }
 
   return classifierPromise;

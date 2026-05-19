@@ -16,7 +16,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-semibold shadow-sm",
+        "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium shadow-none",
         sentiment ? styles[sentiment] : "border-border bg-muted text-foreground",
         className,
       )}
